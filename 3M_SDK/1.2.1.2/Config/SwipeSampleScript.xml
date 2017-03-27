@@ -1,0 +1,411 @@
+<?xml version="1.0"?>
+<OutputWedge>
+  
+	<InputModule name="Swipe">
+		<Parameters>
+			<Parameter name="LogLevel" value="1" />
+			<Parameter name="LogFileName" value="SwipeOutputWedge.log" />
+		</Parameters>
+	</InputModule>
+  
+	<OutputModules>
+		<OutputModule name="Keyboard" alias="keyb">
+			<Parameters>
+				<Parameter name="DelayBetweenKeys" value="10" />
+			</Parameters>
+		</OutputModule>
+	</OutputModules>
+
+  <DataMerging>
+    <DestDataItem name="General_DocumentNumber">
+      <SrcDataItem name="CODELINE_DOC_NUMBER" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_DOC_NUMBER" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_LICENCENUMBER" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_FullName">
+      <SrcDataItem name="AAMVA_PARSED_FULLNAME" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_GivenNames">
+      <SrcDataItem name="CODELINE_FORENAMES" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_FORENAMES" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_GIVENNAMES" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Surname">
+      <SrcDataItem name="CODELINE_SURNAME" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_SURNAME" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_SURNAME" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Forename">
+      <SrcDataItem name="CODELINE_FORENAME" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_FORENAME" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_FORENAME" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Forenames">
+      <SrcDataItem name="CODELINE_FORENAMES" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_FORENAMES" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_MiddleName">
+      <SrcDataItem name="AAMVA_PARSED_MIDDLENAME" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_NameSuffix,">
+      <SrcDataItem name="AAMVA_PARSED_NAMESUFFIX" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_GivenNames,">
+      <SrcDataItem name="AAMVA_PARSED_GIVENNAMES" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_SecondName,">
+      <SrcDataItem name="CODELINE_SECOND_NAME" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_SECOND_NAME" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Gender">
+      <SrcDataItem name="CODELINE_SEX" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_SEX" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_SEX" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_GenderLetter">
+      <SrcDataItem name="CODELINE_SHORT_SEX" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_SHORT_SEX" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_SHORTSEX" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_AddressStreet">
+      <SrcDataItem name="AAMVA_PARSED_ADDRESS_STREET" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_AddressCity">
+      <SrcDataItem name="AAMVA_PARSED_ADDRESS_CITY" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_AddressState">
+      <SrcDataItem name="AAMVA_PARSED_ADDRESS_STATE" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_AddressPostalCode">
+      <SrcDataItem name="AAMVA_PARSED_ADDRESS_POSTALCODE" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_AddressCountry">
+      <SrcDataItem name="CODELINE_ISSUING_STATE" priority="1" />
+      <SrcDataItem name="AAMVA_PARSED_ADDRESS_COUNTRY" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_IssuingState">
+      <SrcDataItem name="CODELINE_ISSUING_STATE" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_ISSUING_STATE" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Nationality">
+      <SrcDataItem name="CODELINE_NATIONALITY" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_NATIONALITY" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_OptionalData1">
+      <SrcDataItem name="CODELINE_OPTIONAL_DATA_1" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_OPTIONAL_DATA_1" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_OptionalData2">
+      <SrcDataItem name="CODELINE_OPTIONAL_DATA_2" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_OPTIONAL_DATA_2" priority="2" />
+    </DestDataItem>
+
+    <DestDataItem name="General_DateOfBirth">
+      <SrcDataItem name="CODELINE_DATE_OF_BIRTH_STR" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_DATE_OF_BIRTH_STR" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_DATEOFBIRTH" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_IssueDate">
+      <SrcDataItem name="AAMVA_PARSED_ISSUEDATE" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_ExpiryDate,">
+      <SrcDataItem name="CODELINE_EXPIRY_DATE_STR," priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_EXPIRY_DATE_STR," priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_EXPIRYDATE" priority="2" />
+    </DestDataItem>
+
+    <DestDataItem name="General_DateOfBirthFormatted">
+      <SrcDataItem name="CODELINE_DATE_OF_BIRTH_STR_FORMATTED" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_DATE_OF_BIRTH_STR_FORMATTED" priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_DATEOFBIRTH_FORMATTED" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_IssueDateFormatted">
+      <SrcDataItem name="AAMVA_PARSED_ISSUEDATE_FORMATTED" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_ExpiryDateFormatted">
+      <SrcDataItem name="CODELINE_EXPIRY_DATE_STR_FORMATTED," priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_EXPIRY_DATE_STR_FORMATTED," priority="2" />
+      <SrcDataItem name="AAMVA_PARSED_EXPIRYDATE_FORMATTED" priority="2" />
+    </DestDataItem>
+
+    <DestDataItem name="General_CodelineData">
+      <SrcDataItem name="CODELINE_DATA" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_DATA" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Codeline1">
+      <SrcDataItem name="CODELINE_LINE_1" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_LINE_1" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Codeline2">
+      <SrcDataItem name="CODELINE_LINE_2" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_LINE_2" priority="2" />
+    </DestDataItem>
+    <DestDataItem name="General_Codeline3">
+      <SrcDataItem name="CODELINE_LINE_3" priority="1" />
+      <SrcDataItem name="SCDG1_CODELINE_LINE_3" priority="2" />
+    </DestDataItem>
+
+    <DestDataItem name="General_Height">
+      <SrcDataItem name="AAMVA_PARSED_HEIGHT" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_Weight">
+      <SrcDataItem name="AAMVA_PARSED_WEIGHT" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_Hair_Color">
+      <SrcDataItem name="AAMVA_PARSED_HAIR_COLOR" priority="1" />
+    </DestDataItem>
+    <DestDataItem name="General_Eye_Color">
+      <SrcDataItem name="AAMVA_PARSED_EYE_COLOR" priority="1" />
+    </DestDataItem>
+
+  </DataMerging>
+
+  <Script name="Show All Track Data" startup="True">
+
+		<EventHandler name="START_OF_SWIPE_DATA">
+			<Task name="keyb:TypeString" source="START" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</EventHandler>
+
+		<!-- OCR line data -->
+		<DataHandler name="CODELINE_LINE_1" storeAs="$data">
+			<Task name="keyb:TypeString" source="OCR Line 1: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_LINE_2" storeAs="$data">
+			<Task name="keyb:TypeString" source="OCR Line 2: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_LINE_3" storeAs="$data">
+			<Task name="keyb:TypeString" source="OCR Line 3: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<!-- MSR track data -->
+		<DataHandler name="SWIPE_MSR_TRACK_1" storeAs="$data">
+			<Task name="keyb:TypeString" source="MSR Track 1: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="SWIPE_MSR_TRACK_2" storeAs="$data">
+			<Task name="keyb:TypeString" source="MSR Track 2: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="SWIPE_MSR_TRACK_3" storeAs="$data">
+			<Task name="keyb:TypeString" source="MSR Track 3: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<EventHandler name="END_OF_SWIPE_DATA">
+			<DependsOn handler="START_OF_SWIPE_DATA" />
+			<Task name="keyb:TypeString" source="END" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</EventHandler>		
+    
+	</Script>
+	
+	<Script name="Split Up OCR Data into Fields">
+	
+		<EventHandler name="START_OF_SWIPE_DATA">
+			<Task name="keyb:TypeString" source="START" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</EventHandler>
+		
+		<!-- OCR Codeline Data -->
+		<DataHandler name="CODELINE_SURNAME" storeAs="$data">
+			<Task name="keyb:TypeString" source="Surname: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_FORENAMES" storeAs="$data">
+			<Task name="keyb:TypeString" source="Forenames: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+		
+		<DataHandler name="CODELINE_SEX" storeAs="$data">
+			<Task name="keyb:TypeString" source="Gender: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_DATE_OF_BIRTH_STR" storeAs="$data">
+			<Task name="keyb:TypeString" source="Date of Birth: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_EXPIRY_DATE_STR" storeAs="$data">
+			<Task name="keyb:TypeString" source="Expiry Date: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_DOC_TYPE" storeAs="$data">
+			<Task name="keyb:TypeString" source="Document: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+
+		<DataHandler name="CODELINE_DOC_NUMBER" storeAs="$data">
+			<Task name="keyb:TypeString" source="Doc. Number: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+		
+		<DataHandler name="CODELINE_ISSUING_STATE" storeAs="$data">
+			<Task name="keyb:TypeString" source="Issuing State: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+		
+		<DataHandler name="CODELINE_NATIONALITY" storeAs="$data">
+			<Task name="keyb:TypeString" source="Nationality: " />
+			<Task name="keyb:TypeString" source="$data" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</DataHandler>
+	
+		<EventHandler name="END_OF_SWIPE_DATA">
+			<DependsOn handler="START_OF_SWIPE_DATA" />
+			<Task name="keyb:TypeString" source="END" />
+			<Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+		</EventHandler>
+	
+	</Script>
+  
+  <!-- Combined Data script. This is the script combines/displays data from multiply sources - codeline + (mag/barcode) ammva -->
+  <Script name="Combined Data" sync="True">
+
+    <EventHandler name="START_OF_DOCUMENT_DATA">
+      <Task name="keyb:TypeString" source="START" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </EventHandler>
+
+    <!-- OCR Codeline Data -->
+    <DataHandler name="General_Surname" storeAs="$data">
+      <Task name="keyb:TypeString" source="Surname: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Forenames" storeAs="$data">
+      <Task name="keyb:TypeString" source="Forenames: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_DateOfBirth" storeAs="$data">
+      <Task name="keyb:TypeString" source="Date of Birth: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_ExpiryDate" storeAs="$data">
+      <Task name="keyb:TypeString" source="Expiry Date: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_IssueDate" storeAs="$data">
+      <Task name="keyb:TypeString" source="Issue Date: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="CODELINE_DOC_TYPE" storeAs="$data">
+      <Task name="keyb:TypeString" source="Document: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_DocumentNumber" storeAs="$data">
+      <Task name="keyb:TypeString" source="Doc. Number: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_IssuingState" storeAs="$data">
+      <Task name="keyb:TypeString" source="Issuing State: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Nationality" storeAs="$data">
+      <Task name="keyb:TypeString" source="Nationality: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="eneral_AddressStreet" storeAs="$data">
+      <Task name="keyb:TypeString" source="Address Street: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_AddressCity" storeAs="$data">
+      <Task name="keyb:TypeString" source="Address City: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_AddressState" storeAs="$data">
+      <Task name="keyb:TypeString" source="Address State: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_AddressPostalCode" storeAs="$data">
+      <Task name="keyb:TypeString" source="Address Postal Code: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_AddressCountry" storeAs="$data">
+      <Task name="keyb:TypeString" source="Address Country: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Height" storeAs="$data">
+      <Task name="keyb:TypeString" source="Height: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Weight" storeAs="$data">
+      <Task name="keyb:TypeString" source="Weight: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Hair_Color" storeAs="$data">
+      <Task name="keyb:TypeString" source="Hair Color: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <DataHandler name="General_Eye_Color" storeAs="$data">
+      <Task name="keyb:TypeString" source="Eye Color: " />
+      <Task name="keyb:TypeString" source="$data" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </DataHandler>
+
+    <EventHandler name="END_OF_DOCUMENT_DATA">
+      <DependsOn handler="START_OF_DOCUMENT_DATA" />
+      <Task name="keyb:TypeString" source="END" />
+      <Task name="keyb:PressSpecialKey" key="RETURN" ctrl="False" alt="False" shift="False" />
+    </EventHandler>
+
+  </Script>
+
+</OutputWedge>

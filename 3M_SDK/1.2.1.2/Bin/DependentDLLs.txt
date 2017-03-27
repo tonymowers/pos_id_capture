@@ -1,0 +1,4 @@
+ErrorHandlerDll.dll
+DeviceDll.dll
+SettingsDll.dll
+MMMReaderLowLevelAPI.dll

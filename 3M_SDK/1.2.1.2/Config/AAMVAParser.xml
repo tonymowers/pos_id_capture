@@ -1,0 +1,966 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AAMVAParser>
+	<Converters>
+		<Converter id="SexNumericToInitialConverter" type="std">
+			<ConverterValue input="1" output="M" />
+			<ConverterValue input="2" output="F" />
+			<ConverterValue input="unavail" output="U" desc="Ontario 2005 special case" />
+		</Converter>
+		<Converter id="SexNumericToFullConverter" type="std">
+			<ConverterValue input="1" output="Male" />
+			<ConverterValue input="2" output="Female" />
+			<ConverterValue input="unavail" output="Unknown" desc="Ontario 2005 special case" />
+		</Converter>
+		<Converter id="SexInitialToFullConverter" type="std">
+			<ConverterValue input="M" output="Male" />
+			<ConverterValue input="F" output="Female" />
+		</Converter>
+		<Converter id="ISO3LetterCodeConverter" type="std">
+			<ConverterValue input="CDN" output="CAN" />
+		</Converter>
+		<Converter id="CAPostcodeSpacesConverter" type="wildcard">
+			<ConverterValue input="XXXXXX" output="XXX XXX" />
+		</Converter>
+		<Converter id="NonANSIHairColour" type="std">
+			<ConverterValue input="BRN" output="BRO" />
+			<ConverterValue input="BR" output="BRO" />
+			<ConverterValue input="BLD" output="BLN" />
+			<ConverterValue input="WH" output="WHI" />
+		</Converter>
+		<Converter id="NonANSIEyeColour" type="std">
+			<ConverterValue input="BRN" output="BRO" />
+			<ConverterValue input="BR" output="BRO" />
+			<ConverterValue input="BLEU" output="BLU" />
+		</Converter>
+ 	</Converters>
+	<DateFormats>
+		<DateFormat id="YYYYMMDD">
+			<Day start="6" length="2" />
+			<Month start="4" length="2" />
+			<Year start="0" length="4" />
+		</DateFormat>
+		<DateFormat id="MMDDYYYY">
+			<Day start="2" length="2" />
+			<Month start="0" length="2" />
+			<Year start="4" length="4" />
+		</DateFormat>
+		<DateFormat id="MM-DD-YYYY">
+			<Day start="3" length="2" />
+			<Month start="0" length="2" />
+			<Year start="6" length="4" />
+		</DateFormat>
+		<DateFormat id="MMYY">
+			<Month start="0" length="2" />
+			<Year start="2" length="2" />
+		</DateFormat>
+		<DateFormat id="YYMM">
+			<Month start="2" length="2" />
+			<Year start="0" length="2" />
+		</DateFormat>
+		<DateFormat id="DDMMMYYYY">
+			<Day start="0" length="2" />
+			<Month start="3" length="3" />
+			<Year start="7" length="4" />
+		</DateFormat>
+	</DateFormats>
+	<Rules>
+		<Rule id="LicenceNumber" desc="All standards">
+			<Set id="DAQ" set="LicenceNumber" />
+		</Rule>
+		<Rule id="AddressNoCountry" desc="2000 Standard">
+			<Set id="DAI" set="AddressCity" />
+			<Set id="DAK" set="AddressPostalCode" />
+			<Set id="DAJ" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+		</Rule>
+		<Rule id="AddressWithCountry" desc="2003-2009 Standard">
+			<Set id="DAI" set="AddressCity" />
+			<Set id="DAK" set="AddressPostalCode" />
+			<Set id="DAJ" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+			<Convert id="DCG" set="AddressCountry" converter="ISO3LetterCodeConverter" />
+		</Rule>
+		<Rule id="AddressNoCountryCA" desc="2000 Standard">
+			<Set id="DAI" set="AddressCity" />
+			<Set id="DAK" set="AddressPostalCode" />
+			<Set id="DAJ" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+			<Convert id="DAK" set="AddressPostalCode" converter="CAPostcodeSpacesConverter" />
+		</Rule>
+		<Rule id="AddressWithCountryCA" desc="2003-2009 Standard">
+			<Set id="DAI" set="AddressCity" />
+			<Set id="DAK" set="AddressPostalCode" />
+			<Set id="DAJ" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+			<Convert id="DCG" set="AddressCountry" converter="ISO3LetterCodeConverter" />
+			<Convert id="DAK" set="AddressPostalCode" converter="CAPostcodeSpacesConverter" />
+		</Rule>
+		<Rule id="AddressPre2000NorthCarolina" desc="Pre 2000 Standard for North Carolina">
+			<Set id="DAN" set="AddressCity" />
+			<Set id="DAP" set="AddressPostalCode" />
+			<Set id="DAO" set="AddressState" />
+			<Set id="DAL" set="AddressStreet" />
+		</Rule>
+		<Rule id="Address-MagStripe" desc="Cloned mag stripe data">
+			<Set id="DAN" set="AddressCity" />
+			<Set id="DAP" set="AddressPostalCode" />
+			<Set id="DAO" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+		</Rule>
+		<Rule id="Address-MagStripeCA" desc="Cloned mag stripe data">
+			<Set id="DAN" set="AddressCity" />
+			<Set id="DAP" set="AddressPostalCode" />
+			<Set id="DAO" set="AddressState" />
+			<Set id="DAG" set="AddressStreet" />
+			<Convert id="DAP" set="AddressPostalCode" converter="CAPostcodeSpacesConverter" />
+		</Rule>
+		<Rule id="Address2000Oregon" desc="Non-standard">
+			<Set id="DAI" set="AddressCity" />
+			<Set id="DAK" set="AddressPostalCode" />
+			<Set id="DAJ" set="AddressState" />
+			<Set id="DAL" set="AddressStreet" />
+		</Rule>
+		<Rule id="DatesYearMonthDay" desc="2000 Standard">
+			<Date id="DBB" set="DateOfBirth" format="YYYYMMDD" />
+			<Date id="DBA" set="ExpiryDate" format="YYYYMMDD" />
+			<Date id="DBD" set="IssueDate" format="YYYYMMDD" />
+		</Rule>
+		<Rule id="DatesMonthDayYear" desc="2003 Standard">
+			<Date id="DBB" set="DateOfBirth" format="MMDDYYYY" />
+			<Date id="DBA" set="ExpiryDate" format="MMDDYYYY" />
+			<Date id="DBD" set="IssueDate" format="MMDDYYYY" />
+		</Rule>
+		<Rule id="DatesDayTextMonthYear" desc="2000 Standard">
+			<Date id="DBB" set="DateOfBirth" format="DDMMMYYYY" />
+			<Date id="DBA" set="ExpiryDate" format="DDMMMYYYY" />
+			<Date id="DBD" set="IssueDate" format="DDMMMYYYY" />
+		</Rule>
+		<Rule id="DatesByCountry" desc="2005-2009 Standard">			
+			<Date id="DBB" set="DateOfBirth" test="AddressCountry">
+				<Case when="USA" format="MMDDYYYY" />
+				<Default format="YYYYMMDD" />
+			</Date>
+			<Date id="DBA" set="ExpiryDate" test="AddressCountry">
+				<Case when="USA" format="MMDDYYYY" />
+				<Default format="YYYYMMDD" />
+			</Date>
+			<Date id="DBD" set="IssueDate" test="AddressCountry">
+				<Case when="USA" format="MMDDYYYY" />
+				<Default format="YYYYMMDD" />
+			</Date>
+		</Rule>
+		<Rule id="DatesMonth-Day-Year" desc="Non-standard">
+			<Date id="DBB" set="DateOfBirth" format="MM-DD-YYYY" />
+			<Date id="DBA" set="ExpiryDate" format="MM-DD-YYYY" />
+			<Date id="DBD" set="IssueDate" format="MM-DD-YYYY" />
+		</Rule>
+		<Rule id="Dates-MagData" desc="Non-standard">
+			<Date id="DBB" set="DateOfBirth" format="YYYYMMDD" />
+			<Date id="DBA" set="ExpiryDate" format="YYMM" />
+		</Rule>
+		<Rule id="Dates-MagData-WithIssueDate" desc="Non-standard">
+			<Date id="DBB" set="DateOfBirth" format="YYYYMMDD" />
+			<Date id="DBA" set="ExpiryDate" format="YYMM" />
+			<Date id="DBD" set="IssueDate" format="YYYYMMDD" />
+		</Rule>
+		<Rule id="DatesYearMonthDayMAG" desc="Non-Standard Mag">
+			<Date id="DBB" set="DateOfBirth" format="YYYYMMDD" />
+			<Date id="DBA" set="ExpiryDate" format="MMYY" />
+		</Rule>
+		<Rule id="DatesYearMonthDayMAG3" desc="Mag with 3 dates">
+			<Date id="DBB" set="DateOfBirth" format="YYYYMMDD" />
+			<Date id="DBA" set="ExpiryDate" format="YYMM" />
+			<Date id="DBD" set="IssueDate" format="YYYYMMDD" />
+		</Rule>
+		<Rule id="Names-FirstMiddleLastSpaces" desc="2000 Standard">
+			<Names id="DAA" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<FirstName index="0" set="Forename" />
+				<Surname index="2,1" set="Surname" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-Last-FirstMiddleSpaces" desc="2003-2005 Standard">
+			<Names id="DCS" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Names id="DCT" sep=" ">
+				<FirstName index="0" set="Forename" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-Last-First-MiddleCommas" desc="2009 Standard">
+			<Names id="DCS" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Set id="DAC" set="Forename" />
+			<Format id="DAD" set="MiddleName">
+				<Replace what="," with=" " />
+			</Format>
+		</Rule>
+		<Rule id="Names-FirstMiddleLastCommas" desc="Non-standard">
+			<Names id="DAA" sep=",">
+				<NameSuffix index="last" set="NameSuffix" />
+				<FirstName index="0" set="Forename" />
+				<Surname index="2,1" set="Surname" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-LastFirstMiddleCommas" desc="Non-standard">
+			<Names id="DAA" sep=",">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />				
+				<FirstName index="1" set="Forename" />
+				<MiddleName index="2" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-LastFirstMiddleCommasSpaces" desc="Non-standard">
+			<Names id="DAA" sep=", ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />				
+				<FirstName index="1" set="Forename" />
+				<MiddleName index="2" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-LastComma-FirstMiddleSpaces" desc="Non-standard">
+			<Names id="DAA" sep=", ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />				
+				<FirstName index="1" set="Forename" />				
+				<MiddleName index="2" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-Last-FirstMiddleCommas" desc="Non-standard">
+			<Names id="DCS" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Names id="DCT" sep=",">
+				<FirstName index="0" set="Forename" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-Pre2000-NorthCarolina" desc="Pre 2000 Standard for North Carolina">
+			<Set id="DAB" set="Surname" />
+			<Set id="DAC" set="Forename" />
+			<Set id="DAD" set="MiddleName" />
+		</Rule>
+		<Rule id="Names-LastCommas-FirstMiddleCommas" desc="Non-Standard">
+			<Names id="DCS" sep=",">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Names id="DCT" sep=",">
+				<FirstName index="0" set="Forename" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-Last-FirstMiddleCommasSpaces" desc="Non-Standard">
+			<Names id="DCS" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Names id="DCT" sep=", ">
+				<FirstName index="0" set="Forename" />
+				<MiddleName index="1" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-LastFirstMiddleSpaces-MagStripe" desc="Non-Standard">
+			<Names id="DBN" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+				<FirstName index="1" set="Forename" />
+				<MiddleName index="2" set="MiddleName" />
+			</Names>
+		</Rule>
+		<Rule id="Names-LastFirstInitialSpaces-MagStripe" desc="Non-Standard">
+			<Names id="DBN" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<Surname index="0" set="Surname" />
+				<FirstName index="1" set="Forename" />
+			</Names>
+			<Set id="DBR" set="MiddleName" />
+		</Rule>
+		<Rule id="Names-LastFirstMiddleSpaceAndComma-MagStripe" desc="Non-Standard">
+			<Names id="DBO" sep=",">
+				<Surname index="0" set="Surname" />
+			</Names>
+			<Names id="DBP" sep=",">
+				<FirstName index="1" set="Forename" />
+				<MiddleName index="0" set="MiddleName" />
+			</Names>
+		</Rule>   
+		<Rule id="Names-FirstMiddleLastSpaces-MagStripe" desc="Non-Standard">
+			<Names id="DBO" sep=" ">
+				<NameSuffix index="last" set="NameSuffix" />
+				<FirstName index="0" set="Forename" />
+				<MiddleName index="1" set="MiddleName" />
+				<Surname index="2" set="Surname" />	
+			</Names>
+		</Rule>
+		<Rule id="FullAndGivenNames" desc="SDK Only">
+			<Combine set="FullName" members="Forename,MiddleName,Surname,NameSuffix" sep=" " />
+			<Combine set="GivenNames" members="Forename,MiddleName" sep=" " />
+		</Rule>
+		<Rule id="SexInitials" desc="2000 Standard">
+			<Set id="DBC" set="ShortSex" />
+			<Convert id="DBC" set="Sex" converter="SexInitialToFullConverter" />
+		</Rule>
+		<Rule id="SexNumeric" desc="2003-2009 Standard">
+			<Convert id="DBC" set="ShortSex" converter="SexNumericToInitialConverter" />
+			<Convert id="DBC" set="Sex" converter="SexNumericToFullConverter" />
+		</Rule>	
+		<Rule id="Weight-LB">
+			<SetMeasure id="DAW" set="Weight" format="LB" />
+		</Rule>
+		<Rule id="Weight-KG-Alberta">
+			<SetMeasure id="DAW" set="Weight" format="KG" />
+		</Rule>
+		<Rule id="Weight-KG">
+			<SetMeasure id="DAX" set="Weight" format="KG" />
+		</Rule>
+		<Rule id="Height-Inches">
+			<SetMeasure id="DAU" set="Height" format="IN" />
+		</Rule>	
+		<Rule id="Height-Feet-Inches">
+			<SetMeasure id="DAU" set="Height" format="FTIN" />
+		</Rule>			
+		<Rule id="Height-Metres">
+			<SetMeasure id="DAU" set="Height" format="M" />
+		</Rule>
+		<Rule id="Height-Centimetres">
+			<SetMeasure id="DAU" set="Height" format="CM" />
+		</Rule>
+		<Rule id="Height-Feet-Inches-Alt">
+			<SetMeasure id="DAV" set="Height" format="FTIN" />
+		</Rule>
+		<Rule id="Height-Centimetres-Alberta">
+			<SetMeasure id="DAV" set="Height" format="CM" />
+		</Rule>
+		<Rule id="Weight-Barcode-KG">
+			<SetMeasure id="DAX" set="Weight" format="KG" />
+		</Rule>
+		<Rule id="Weight-Barcode-LB">
+			<SetMeasure id="DAX" set="Weight" format="LB" />
+		</Rule>		
+		<Rule id="Height-Barcode-Inches">
+			<SetMeasure id="DAV" set="Height" format="IN" />
+		</Rule>
+		<Rule id="Height-Barcode-Centimetres">
+			<SetMeasure id="DAV" set="Height" format="CM" />
+		</Rule>
+		<Rule id="Height-Barcode-Feet-Inches">
+			<SetMeasure id="DAV" set="Height" format="FTIN" />
+		</Rule>		
+		<Rule id="EyeColour">
+			<Set id="DAY" set="EyeColour" />
+			<Convert id="DAY" set="EyeColour" converter="NonANSIEyeColour" />
+		</Rule>
+		<Rule id="HairColour">
+			<Set id="DAZ" set="HairColour" />
+			<Convert id="DAZ" set="HairColour" converter="NonANSIHairColour" />
+		</Rule>		
+	</Rules>
+	<Groups>
+		<Group iin="GRP001" desc="Canada">
+			<Licence iin="636012" desc="Ontario" />		
+			<Licence iin="636016" desc="Newfoundland" />
+			<Licence iin="604426" desc="Prince Edward Island" />
+			<Licence iin="636028" desc="British Columbia" />
+			<Licence iin="604428" desc="Quebec" />
+			<Licence iin="636017" desc="New Brunswick" />
+			<Licence iin="636013" desc="Nova Scotia" />
+			<Licence iin="636048" desc="Manitoba" />
+			<Licence iin="636044" desc="Saskatchewan" />
+			<Licence iin="604429" desc="Yukon" />
+			<Licence iin="990876" desc="Alberta" />
+		</Group>		
+	</Groups>	
+	<Templates>
+		<!-- Mag stripe data British Columbia -->
+		<Template version="48">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="Address-MagStripe" />
+				<Exception iin="GRP001" rule="Address-MagStripeCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesYearMonthDay" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-LastFirstMiddleSpaces-MagStripe" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />				
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-Barcode-LB" />
+				<Exception iin="GRP001" rule="Weight-Barcode-KG" />
+			</Fields>
+			<Fields id ="Height">
+				<Default rule="Height-Barcode-Inches" />
+				<Exception iin="GRP001" rule="Height-Barcode-Centimetres" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>	
+		
+		<!-- Mag stripe data Ontario -->
+		<Template version="32">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="Address-MagStripe" />
+				<Exception iin="GRP001" rule="Address-MagStripeCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="Dates-MagData" />
+				<Exception iin="636012" rule="DatesYearMonthDayMAG3" desc="Ontario" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-LastFirstInitialSpaces-MagStripe" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />
+				<Exception iin="636012" rule="SexNumeric" desc="Ontario" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-Barcode-LB" />
+				<Exception iin="GRP001" rule="Weight-Barcode-KG" />
+			</Fields>
+			<Fields id ="Height">
+				<Default rule="Height-Barcode-Inches" />
+				<Exception iin="GRP001" rule="Height-Barcode-Centimetres" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		
+		<!-- Mag stripe data California and old MN-->
+		<Template version="33">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="Address-MagStripe" />
+				<Exception iin="GRP001" rule="Address-MagStripeCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="Dates-MagData" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-LastFirstInitialSpaces-MagStripe" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-Barcode-LB" />
+				<Exception iin="GRP001" rule="Weight-Barcode-KG" />
+			</Fields>
+			<Fields id ="Height">
+				<Default rule="Height-Barcode-Feet-Inches" />
+				<Exception iin="GRP001" rule="Height-Barcode-Centimetres" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		
+		<!-- Mag stripe data Ontario and Minnesota -->
+		<Template version="34">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="Address-MagStripe" />
+				<Exception iin="GRP001" rule="Address-MagStripeCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="Dates-MagData" />
+				<Exception iin="636012" rule="Dates-MagData-WithIssueDate" desc="Ontario" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-LastFirstMiddleSpaceAndComma-MagStripe" />
+				<Exception iin="636038" rule="Names-FirstMiddleLastSpaces-MagStripe" desc="Minnesota" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-Barcode-LB" />
+				<Exception iin="GRP001" rule="Weight-Barcode-KG" />
+			</Fields>
+			<Fields id ="Height">
+				<Default rule="Height-Barcode-Feet-Inches" />
+				<Exception iin="GRP001" rule="Height-Barcode-Centimetres" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		
+		<!-- MN Magstrip data -->
+		<Template version="64">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="Address-MagStripe" />
+				<Exception iin="GRP001" rule="Address-MagStripeCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesYearMonthDayMAG" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-FirstMiddleLastSpaces-MagStripe" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />				
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-Barcode-LB" />
+				<Exception iin="GRP001" rule="Weight-Barcode-KG" />
+			</Fields>
+			<Fields id ="Height">
+				<Default rule="Height-Barcode-Feet-Inches" />
+				<Exception iin="GRP001" rule="Height-Barcode-Centimetres" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		
+		<!-- Pre AAMVA 2000 Standard -->
+		<Template version="0">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressNoCountry" />
+				<Exception iin="636018" rule="AddressPre2000NorthCarolina" desc="Iowa" />
+				<Exception iin="636004" rule="AddressPre2000NorthCarolina" desc="North Carolina" />
+				<Exception iin="GRP001" rule="AddressNoCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesYearMonthDay" />
+				<Exception iin="636004" rule="DatesMonth-Day-Year" desc="North Carolina" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-FirstMiddleLastSpaces" />
+				<Exception iin="610093" rule="Names-LastFirstMiddleCommas" desc="Arkansas" />
+				<Exception iin="636018" rule="Names-Pre2000-NorthCarolina" desc="Iowa" />
+				<Exception iin="636004" rule="Names-Pre2000-NorthCarolina" desc="North Carolina" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />				
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Feet-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+				<Exception iin="636004" rule="Height-Feet-Inches-Alt" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		<!-- AAMVA 2000 Standard -->
+		<Template version="1">			
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressNoCountry" />
+				<Exception iin="636029" rule="Address2000Oregon" desc="Oregon" />
+				<Exception iin="GRP001" rule="AddressNoCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesYearMonthDay" />
+				<Exception iin="990876" rule="DatesDayTextMonthYear" desc="Alberta" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-FirstMiddleLastSpaces" />
+				<Exception iin="636033" rule="Names-FirstMiddleLastCommas" desc="Alabama" />
+				<Exception iin="636026" rule="Names-LastFirstMiddleCommas" desc="Arizona" />
+				<Exception iin="636020" rule="Names-FirstMiddleLastCommas" desc="Colorado" />
+				<Exception iin="636006" rule="Names-LastFirstMiddleCommas" desc="Connecticut" />
+				<Exception iin="636010" rule="Names-LastFirstMiddleCommas" desc="Florida" />
+				<Exception iin="636035" rule="Names-LastFirstMiddleCommas" desc="Illinois" />
+				<Exception iin="636022" rule="Names-LastFirstMiddleCommas" desc="Kansas" />
+				<Exception iin="636046" rule="Names-LastFirstMiddleCommas" desc="Kentucky" />
+				<Exception iin="636007" rule="Names-LastComma-FirstMiddleSpaces" desc="Louisiana" />
+				<Exception iin="636002" rule="Names-LastFirstMiddleCommas" desc="Massachusetts" />
+				<Exception iin="636003" rule="Names-LastFirstMiddleCommas" desc="Maryland" />
+				<Exception iin="636051" rule="Names-LastFirstMiddleCommas" desc="Mississippi" />
+				<Exception iin="636030" rule="Names-LastFirstMiddleCommas" desc="Missouri" />
+				<Exception iin="636008" rule="Names-LastFirstMiddleCommas" desc="Montana" />
+				<Exception iin="636054" rule="Names-LastFirstMiddleCommas" desc="Nebraska" />
+				<Exception iin="636049" rule="Names-LastFirstMiddleCommas" desc="Nevada" />
+				<Exception iin="636039" rule="Names-LastFirstMiddleCommas" desc="New Hampshire" />
+				<Exception iin="636036" rule="Names-LastFirstMiddleCommas" desc="New Jersey" />
+				<Exception iin="636058" rule="Names-LastFirstMiddleCommas" desc="Oklahoma" />
+				<Exception iin="636029" rule="Names-LastComma-FirstMiddleSpaces" desc="Oregon" />
+				<Exception iin="636052" rule="Names-LastFirstMiddleCommas" desc="Rhode Island" />
+				<Exception iin="636005" rule="Names-LastFirstMiddleCommas" desc="South Carolina" />
+				<Exception iin="636042" rule="Names-LastFirstMiddleCommas" desc="South Dakota" />
+				<Exception iin="636024" rule="Names-LastFirstMiddleCommasSpaces" desc="Vermont" />
+				<Exception iin="636000" rule="Names-LastFirstMiddleCommasSpaces" desc="Virginia" />
+				<Exception iin="636045" rule="Names-LastFirstMiddleCommas" desc="Washington" />
+				<Exception iin="636031" rule="Names-LastFirstMiddleCommas" desc="Wisconsin" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexInitials" />
+				<Exception iin="636033" rule="SexNumeric" desc="Alabama" />
+				<Exception iin="636026" rule="SexNumeric" desc="Arizona" />
+				<Exception iin="636020" rule="SexNumeric" desc="Colorado" />
+				<Exception iin="636006" rule="SexNumeric" desc="Connecticut" />
+				<Exception iin="636010" rule="SexNumeric" desc="Florida" />
+				<Exception iin="636037" rule="SexNumeric" desc="Indiana" />
+				<Exception iin="636022" rule="SexNumeric" desc="Kansas" />
+				<Exception iin="636007" rule="SexNumeric" desc="Louisiana" />
+				<Exception iin="636003" rule="SexNumeric" desc="Maryland" />
+				<Exception iin="636008" rule="SexNumeric" desc="Montana" />
+				<Exception iin="636054" rule="SexNumeric" desc="Nebraska" />
+				<Exception iin="636049" rule="SexNumeric" desc="Nevada" />
+				<Exception iin="636036" rule="SexNumeric" desc="New Jersey" />
+				<Exception iin="636029" rule="SexNumeric" desc="Oregon" />
+				<Exception iin="636005" rule="SexNumeric" desc="South Carolina" />
+				<Exception iin="636042" rule="SexNumeric" desc="South Dakota" />
+				<Exception iin="636053" rule="SexNumeric" desc="Tennessee" />
+				<Exception iin="636024" rule="SexNumeric" desc="Vermont" />
+				<Exception iin="636045" rule="SexNumeric" desc="Washington" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Feet-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+				<Exception iin="990876" rule="Height-Centimetres-Alberta" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		<!-- AAMVA 2003 Standard -->
+		<Template version="2">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesMonthDayYear" />
+				<Exception iin="636038" rule="DatesYearMonthDay" desc="Minnesota" />
+				<Exception iin="604426" rule="DatesYearMonthDay" desc="Prince Edward Island" />
+				<Exception iin="636016" rule="DatesYearMonthDay" desc="NewFoundLand" />
+				<Exception iin="636011" rule="DatesYearMonthDay" desc="Delaware" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-FirstMiddleSpaces" />
+				<Exception iin="636038" rule="Names-FirstMiddleLastSpaces" desc="Minnesota" />
+				<Exception iin="604426" rule="Names-Last-FirstMiddleCommas" desc="PEI" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		<!-- AAMVA 2005 Standard -->
+		<Template version="3">					
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+				<Exception iin="636032" rule="DatesMonthDayYear" desc="Michigan" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-FirstMiddleSpaces" />
+				<Exception iin="636001" rule="Names-Last-FirstMiddleCommas" desc="New York" />
+				<Exception iin="636012" rule="Names-LastCommas-FirstMiddleCommas" desc="Ontario" />
+				<Exception iin="604426" rule="Names-Last-FirstMiddleCommasSpaces" desc="Prince Edward Island" />
+				<Exception iin="636040" rule="Names-Last-FirstMiddleCommas" desc="Utah" />
+				<Exception iin="636000" rule="Names-Last-FirstMiddleCommas" desc="Virginia" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+				<Exception iin="990876" rule="SexInitials" desc="Alberta" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+				<Exception iin="636001" rule="Height-Feet-Inches" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />
+				<Exception iin="990876" rule="Weight-KG-Alberta" />
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		<!-- AAMVA 2009 Standard -->
+		<Template version="4">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-First-MiddleCommas" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>
+		</Template>
+		<!-- AAMVA 07-2010 standard -->
+		<Template version="5">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-First-MiddleCommas" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>			
+		</Template>						
+		<!-- AAMVA 07-2011 standard -->
+		<Template version="6">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-First-MiddleCommas" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>			
+		</Template>						
+		<!-- AAMVA 06-2012 standard -->
+		<Template version="7">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-First-MiddleCommas" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>			
+		</Template>						
+		<!-- AAMVA 08-2013 standard -->
+		<Template version="8">
+			<Fields id="LicenceNumber">
+				<Default rule="LicenceNumber" />
+			</Fields>
+			<Fields id="Address">
+				<Default rule="AddressWithCountry" />
+				<Exception iin="GRP001" rule="AddressWithCountryCA" desc="Adds spaces to PostalCodes" />
+			</Fields>
+			<Fields id="Dates">
+				<Default rule="DatesByCountry" />
+			</Fields>
+			<Fields id="NameParts">
+				<Default rule="Names-Last-First-MiddleCommas" />
+			</Fields>
+			<Fields id="NamesCombined">
+				<Default rule="FullAndGivenNames" />
+			</Fields>
+			<Fields id="Sex">
+				<Default rule="SexNumeric" />
+			</Fields>
+			<Fields id="Height">
+				<Default rule="Height-Inches" />
+				<Exception iin="GRP001" rule="Height-Centimetres" />
+			</Fields>
+			<Fields id="Weight">
+				<Default rule="Weight-LB" />
+				<Exception iin="GRP001" rule="Weight-KG" />			
+			</Fields>
+			<Fields id="HairColour">
+				<Default rule="HairColour" />
+			</Fields>
+			<Fields id="EyeColour">
+				<Default rule="EyeColour" />
+			</Fields>			
+		</Template>						
+	</Templates>
+</AAMVAParser>
