@@ -15,7 +15,7 @@ namespace CH.Alika.POS.Hardware
             {
                 try
                 {
-                    scanner.OnCustomerDataRead += HandleNewCustomerData;
+                    scanner.OnCodeLineDataEvent += HandleNewSwipeData;
                     scanner.Initialize();
                     Console.WriteLine(scanner);
                 }
@@ -27,9 +27,9 @@ namespace CH.Alika.POS.Hardware
             }
         }
 
-        static void HandleNewCustomerData(object sender, EventArgs e)
+        static void HandleNewSwipeData(object sender, CodeLineDataEvent e)
         {
-            Console.WriteLine("new customer data");
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(e.CodeLineData));
         }
     }
 }

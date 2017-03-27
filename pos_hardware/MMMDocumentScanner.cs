@@ -10,7 +10,7 @@ namespace CH.Alika.POS.Hardware
     public class MMMDocumentScanner : IDisposable
     {
         private MMM.Readers.Modules.Swipe.SwipeSettings swipeSettings;
-        public event EventHandler OnCustomerDataRead;
+        public event EventHandler<CodeLineDataEvent> OnCodeLineDataEvent;
 
         public void Initialize()
         {
@@ -129,13 +129,16 @@ namespace CH.Alika.POS.Hardware
 
         private void DeviceDataHandler(MMM.Readers.Modules.Swipe.SwipeItem aDataItem, object aData) 
         {
-            Console.WriteLine("***READER DATA***");
-            OnCustomerDataRead(this, EventArgs.Empty);
+            if (aDataItem == MMM.Readers.Modules.Swipe.SwipeItem.OCR_CODELINE)
+            {
+                MMM.Readers.CodelineData codeLineData = (MMM.Readers.CodelineData)aData;
+                OnCodeLineDataEvent(this, new CodeLineDataEvent(codeLineData));
+            }
         }
 
         private void DeviceEventHanlder(MMM.Readers.FullPage.EventCode aEventType)
         {
-            Console.WriteLine("***READER EVENT***");
+            // Console.WriteLine("***READER EVENT***");
         }
 
         void IDisposable.Dispose()
