@@ -13,9 +13,17 @@ namespace CH.Alika.POS.Hardware
             Console.WriteLine();
             using (MMMDocumentScanner scanner = new MMMDocumentScanner())
             {
-                scanner.OnCustomerDataRead += HandleNewCustomerData;
-                scanner.Initialize();
-                Console.ReadLine();
+                try
+                {
+                    scanner.OnCustomerDataRead += HandleNewCustomerData;
+                    scanner.Initialize();
+                    Console.WriteLine(scanner);
+                }
+                catch (PosHardwareException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                Console.ReadLine();   
             }
         }
 
