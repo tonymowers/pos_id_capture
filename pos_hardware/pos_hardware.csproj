@@ -8,7 +8,7 @@
     <ProjectGuid>{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CH.Alika.POS.Hardware</RootNamespace>
+    <RootNamespace>CH.Alika.POS</RootNamespace>
     <AssemblyName>AlikaPosHardware</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -50,15 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MMMDocumentScanner.cs" />
-    <Compile Include="PosHardwareException.cs" />
+    <Compile Include="Hardware\ConsoleDocumentSink.cs" />
+    <Compile Include="Hardware\IDocumentSink.cs" />
+    <Compile Include="Hardware\IDocumentSource.cs" />
+    <Compile Include="Hardware\MMMDocumentScanner.cs" />
+    <Compile Include="Hardware\PosHardwareException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CodeLineDataEvent.cs" />
+    <Compile Include="Hardware\CodeLineScanEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

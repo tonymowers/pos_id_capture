@@ -7,11 +7,14 @@ using System.Text.RegularExpressions;
 namespace CH.Alika.POS.Hardware
 {
     
-    public class MMMDocumentScanner : IDisposable
+    public class MMMDocumentScanner : IDocumentSource
     {
         private MMM.Readers.Modules.Swipe.SwipeSettings swipeSettings;
-        public event EventHandler<CodeLineDataEvent> OnCodeLineDataEvent;
-
+        public event EventHandler<CodeLineScanEvent> OnCodeLineScanEvent;
+        public String DocumentSourceId
+        {
+            get { return "deviceA"; }
+        }
         public void Initialize()
         {
             // Initialise logging and error handling first. The error handler callback
@@ -132,7 +135,7 @@ namespace CH.Alika.POS.Hardware
             if (aDataItem == MMM.Readers.Modules.Swipe.SwipeItem.OCR_CODELINE)
             {
                 MMM.Readers.CodelineData codeLineData = (MMM.Readers.CodelineData)aData;
-                OnCodeLineDataEvent(this, new CodeLineDataEvent(codeLineData));
+                OnCodeLineScanEvent(this, new CodeLineScanEvent(codeLineData));
             }
         }
 
@@ -141,7 +144,7 @@ namespace CH.Alika.POS.Hardware
             // Console.WriteLine("***READER EVENT***");
         }
 
-        void IDisposable.Dispose()
+        public void Dispose()
         {
             MMM.Readers.Modules.Swipe.Shutdown();
         }

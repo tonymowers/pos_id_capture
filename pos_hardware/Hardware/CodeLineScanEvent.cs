@@ -5,11 +5,11 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    public class CodeLineDataEvent : EventArgs
+    public class CodeLineScanEvent : EventArgs
     {
         public MMM.Readers.CodelineData CodeLineData { get; private set; }
 
-        public CodeLineDataEvent(MMM.Readers.CodelineData codeLineData)
+        public CodeLineScanEvent(MMM.Readers.CodelineData codeLineData)
         {
             CodeLineData = codeLineData;
         }
