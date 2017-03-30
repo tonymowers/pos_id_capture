@@ -5,11 +5,11 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    class ConsoleDocumentSink : IDocumentSink
+    class ScanSinkConsole : IScanSink
     {
         public void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
-            IDocumentSource source = sender as IDocumentSource;
+            IScanSource source = sender as IScanSource;
             Console.WriteLine(source.DocumentSourceId);
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(e));
         }

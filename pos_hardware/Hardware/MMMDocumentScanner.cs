@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 namespace CH.Alika.POS.Hardware
 {
     
-    public class MMMDocumentScanner : IDocumentSource
+    public class MMMDocumentScanner : IScanSource
     {
         private MMM.Readers.Modules.Swipe.SwipeSettings swipeSettings;
         public event EventHandler<CodeLineScanEvent> OnCodeLineScanEvent;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    public interface IDocumentSink : IDisposable
+    public interface IScanSink : IDisposable
     {
         void HandleCodeLineScan(object sender, CodeLineScanEvent e);
     }

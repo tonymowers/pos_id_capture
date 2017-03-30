@@ -50,9 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Hardware\ConsoleDocumentSink.cs" />
-    <Compile Include="Hardware\IDocumentSink.cs" />
-    <Compile Include="Hardware\IDocumentSource.cs" />
+    <Compile Include="Hardware\ScanSinkConsole.cs" />
+    <Compile Include="Hardware\IScanSink.cs" />
+    <Compile Include="Hardware\IScanSource.cs" />
     <Compile Include="Hardware\MMMDocumentScanner.cs" />
     <Compile Include="Hardware\PosHardwareException.cs" />
     <Compile Include="Program.cs" />

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    public interface IDocumentSource : IDisposable
+    public interface IScanSource : IDisposable
     {
         string DocumentSourceId { get; }
         event EventHandler<CodeLineScanEvent> OnCodeLineScanEvent;

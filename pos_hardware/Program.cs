@@ -14,7 +14,7 @@ namespace CH.Alika.POS
             Console.WriteLine("Press enter key to exit");
             Console.WriteLine();
             using (MMMDocumentScanner scanner = new MMMDocumentScanner())
-            using (IDocumentSink documentSink = new ConsoleDocumentSink())
+            using (IScanSink documentSink = new ScanSinkConsole())
             {
                 try
                 {
