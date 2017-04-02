@@ -14,12 +14,12 @@ namespace CH.Alika.POS
             Console.WriteLine("Press enter key to exit");
             Console.WriteLine();
             using (MMMDocumentScanner scanner = new MMMDocumentScanner())
-            using (IScanSink documentSink = new ScanSinkConsole())
+            using (IScanSink documentSink = new ScanSinkWebService())
             {
                 try
                 {
                     scanner.OnCodeLineScanEvent += documentSink.HandleCodeLineScan;
-                    scanner.Initialize();
+                    scanner.Activate();
                     Console.WriteLine(scanner);
                 }
                 catch (PosHardwareException e)
