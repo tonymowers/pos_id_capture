@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    class PosHardwareException : Exception
+    public class PosHardwareException : Exception
     {
         public PosHardwareException()
         {

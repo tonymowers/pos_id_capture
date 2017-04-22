@@ -11,7 +11,8 @@ namespace CH.Alika.POS.Hardware
         private TalkTalkApiConfig Settings;
         public TalkTalkApi()
         {
-            string text = System.IO.File.ReadAllText(@"TalkTalkConfig.txt");
+            String dir = AppDomain.CurrentDomain.BaseDirectory;
+            string text = System.IO.File.ReadAllText(dir + @"TalkTalkConfig.txt");
             Settings  = Newtonsoft.Json.JsonConvert.DeserializeObject<TalkTalkApiConfig>(text);
         }
 
