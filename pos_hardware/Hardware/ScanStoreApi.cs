@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RestSharp;
+using System.IO;
 
 namespace CH.Alika.POS.Hardware
 {
-    public class TalkTalkApi
+    public class ScanStoreApi
     {
-        private TalkTalkApiConfig Settings;
-        public TalkTalkApi()
+        private ScanStoreConfig Settings;
+        public ScanStoreApi()
         {
-            String dir = AppDomain.CurrentDomain.BaseDirectory;
-            string text = System.IO.File.ReadAllText(dir + @"TalkTalkConfig.txt");
-            Settings  = Newtonsoft.Json.JsonConvert.DeserializeObject<TalkTalkApiConfig>(text);
+            try
+            {
+                String dir = AppDomain.CurrentDomain.BaseDirectory;
+                string text = System.IO.File.ReadAllText(dir + @"ScanStoreConfig.txt");
+                Settings = Newtonsoft.Json.JsonConvert.DeserializeObject<ScanStoreConfig>(text);
+            }
+            catch (FileNotFoundException e)
+            {
+                throw new ConfigNotFoundException(e);
+            }
         }
 
-        private T Execute<T>(RestRequest request) where T : new()
+        private String Execute<T>(RestRequest request) where T : new()
         {
             // See http://restsharp.org/
             var client = new RestClient();
@@ -29,11 +37,10 @@ namespace CH.Alika.POS.Hardware
                 var twilioException = new ApplicationException(message, response.ErrorException);
                 throw twilioException;
             }
-            Console.WriteLine(response.Content);
-            return response.Data;
+            return response.Content;
         }
 
-        public void CodeLineDataPut(MMM.Readers.CodelineData codeLineData)
+        public String CodeLineDataPut(MMM.Readers.CodelineData codeLineData)
         {
             var request = new RestRequest(Method.POST);
             Dictionary<string,object> parameters = new Dictionary<string,object>();
@@ -46,7 +53,7 @@ namespace CH.Alika.POS.Hardware
                    { "codeLineData" , codeLineData }
                 }
             });
-            Execute<VOID>(request);
+            return Execute<VOID>(request);
         }
 
         private class VOID
@@ -61,7 +68,7 @@ namespace CH.Alika.POS.Hardware
 
     }
 
-    class TalkTalkApiConfig
+    class ScanStoreConfig
     {
         public String BaseUrl { get; set; }
     }

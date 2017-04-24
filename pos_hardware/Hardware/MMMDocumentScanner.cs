@@ -124,7 +124,7 @@ namespace CH.Alika.POS.Hardware
 
         private void DeviceErrorHandler(MMM.Readers.ErrorCode aErrorCode, string aErrorMessage)
         {
-            Console.WriteLine("***READER ERROR***");
+            Console.WriteLine("***READER ERROR: " + aErrorCode);
         }
 
         private void DeviceDataHandler(MMM.Readers.Modules.Swipe.SwipeItem aDataItem, object aData) 

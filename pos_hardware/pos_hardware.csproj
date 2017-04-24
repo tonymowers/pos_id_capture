@@ -57,13 +57,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Hardware\ConfigNotFoundException.cs" />
     <Compile Include="Hardware\ScanSinkConsole.cs" />
     <Compile Include="Hardware\IScanSink.cs" />
     <Compile Include="Hardware\IScanSource.cs" />
     <Compile Include="Hardware\MMMDocumentScanner.cs" />
     <Compile Include="Hardware\PosHardwareException.cs" />
+    <Compile Include="Hardware\ScanSinkEvent.cs" />
     <Compile Include="Hardware\ScanSinkWebService.cs" />
-    <Compile Include="Hardware\TalkTalkApi.cs" />
+    <Compile Include="Hardware\ScanStoreApi.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Hardware\CodeLineScanEvent.cs" />

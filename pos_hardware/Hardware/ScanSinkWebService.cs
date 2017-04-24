@@ -8,16 +8,18 @@ namespace CH.Alika.POS.Hardware
 {
     public class ScanSinkWebService : IScanSink
     {
+        public event EventHandler<ScanSinkEvent> OnScanSinkEvent;
         public void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
             try
             {
-                TalkTalkApi service = new TalkTalkApi();
-                service.CodeLineDataPut(e.CodeLineData);
+                ScanStoreApi service = new ScanStoreApi();
+                String response = service.CodeLineDataPut(e.CodeLineData);
+                OnScanSinkEvent(this, new ScanSinkEvent(response));
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                OnScanSinkEvent(this, new ScanSinkEvent(ex));
             }
         }
 

@@ -18,6 +18,7 @@ namespace CH.Alika.POS
             {
                 try
                 {
+                    documentSink.OnScanSinkEvent += HandleScanSinkEvent;
                     scanner.OnCodeLineScanEvent += documentSink.HandleCodeLineScan;
                     scanner.Activate();
                     Console.WriteLine(scanner);
@@ -30,5 +31,9 @@ namespace CH.Alika.POS
             }
         }
 
+        static void HandleScanSinkEvent(object sender, ScanSinkEvent e)
+        {
+            Console.WriteLine(e);
+        }
     }
 }
