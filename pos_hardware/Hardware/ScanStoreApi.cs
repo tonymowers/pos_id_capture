@@ -10,12 +10,12 @@ namespace CH.Alika.POS.Hardware
     public class ScanStoreApi
     {
         private ScanStoreConfig Settings;
-        public ScanStoreApi()
+        public ScanStoreApi(String configFileName)
         {
             try
             {
                 String dir = AppDomain.CurrentDomain.BaseDirectory;
-                string text = System.IO.File.ReadAllText(dir + @"ScanStoreConfig.txt");
+                string text = System.IO.File.ReadAllText(configFileName);
                 Settings = Newtonsoft.Json.JsonConvert.DeserializeObject<ScanStoreConfig>(text);
             }
             catch (FileNotFoundException e)

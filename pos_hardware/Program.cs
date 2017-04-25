@@ -8,13 +8,13 @@ namespace CH.Alika.POS
 {
     class Program
     {
-       
+        private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";  
         static void Main(string[] args)
         {
             Console.WriteLine("Press enter key to exit");
             Console.WriteLine();
             using (MMMDocumentScanner scanner = new MMMDocumentScanner())
-            using (IScanSink documentSink = new ScanSinkWebService())
+            using (IScanSink documentSink = new ScanSinkWebService(_configFileName))
             {
                 try
                 {

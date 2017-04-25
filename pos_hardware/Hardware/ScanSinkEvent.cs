@@ -7,7 +7,7 @@ namespace CH.Alika.POS.Hardware
 {
     public class ScanSinkEvent : EventArgs
     {
-        private Exception ex;
+        private Exception _exception;
         private String response;
 
         public ScanSinkEvent(String response)
@@ -15,20 +15,22 @@ namespace CH.Alika.POS.Hardware
             this.response = response;
         }
 
-        public Boolean IsException()
+        public Boolean IsException
         {
-            return ex != null;
+            get { return _exception != null; }
         }
-
+        public Exception Exception
+        {
+            get { return _exception;  }
+        }
         public ScanSinkEvent(Exception ex)
         {
-            // TODO: Complete member initialization
-            this.ex = ex;
+            this._exception = ex;
         }
 
         public override string ToString()
         {
-            return "ScanSinkEvent: " + (IsException() ? ex.Message: "scan delivered (" + response + ")");
+            return "ScanSinkEvent: " + (IsException ? _exception.Message: "scan delivered (" + response + ")");
         }
     }
 }

@@ -40,8 +40,8 @@
             // serviceInstaller1
             // 
             this.serviceInstaller1.Description = "Point of Sale Service for Alika POS";
-            this.serviceInstaller1.DisplayName = "Alika PointOfSale Service";
-            this.serviceInstaller1.ServiceName = "HardwareService";
+            this.serviceInstaller1.DisplayName = "Alika Point-Of-Sale Service";
+            this.serviceInstaller1.ServiceName = "AlikaPosService";
             this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
