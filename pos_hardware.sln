@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pos_hardware_console", "pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pos_hardware_service", "pos_hardware_service\pos_hardware_service.csproj", "{DEAD45F0-3811-4D75-A512-1F9BB879E805}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "pos_service_setup", "pos_service_setup\AlikaPosServiceSetup.vdproj", "{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -25,6 +27,10 @@ Global
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Debug|x86.Build.0 = Debug|x86
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Release|x86.ActiveCfg = Release|x86
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Release|x86.Build.0 = Release|x86
+		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Debug|x86.ActiveCfg = Debug
+		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Debug|x86.Build.0 = Debug
+		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Release|x86.ActiveCfg = Release
+		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
