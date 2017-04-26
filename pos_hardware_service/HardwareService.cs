@@ -17,6 +17,12 @@ namespace CH.Alika.POS.Service
     // For how to log to the Windows EventLog
     // See: https://msdn.microsoft.com/en-us/library/f6567h1s(v=vs.110).aspx
     //
+    // For how to build an installer for the service
+    // See: https://support.microsoft.com/en-us/help/816169/how-to-create-a-setup-project-for-a-windows-service-application-in-visual-c
+    //
+    // Alternative installer solutions:
+    // http://wixtoolset.org/
+    //
     // To see the event log
     // Type in start menu: Management
     // run Computer Management
