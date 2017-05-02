@@ -21,6 +21,9 @@ To learn about how to use the WIX installer I relied upon the following websites
 To create the numerous components needed to be listed in the WIX project I used the "heat.exe" tool, 
 which comes packaged in the WIX toolset, to help create some examples.
 
+See:
+- http://wixtoolset.org/documentation/manual/v3/overview/heat.html
+
 ## How To Install Necessary Drivers
 
 The next step will be to build a bootstrap installer which installs the necessary device drivers before the service.s
