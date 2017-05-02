@@ -23,6 +23,6 @@ which comes packaged in the WIX toolset, to help create some examples.
 
 ## How To Install Necessary Drivers
 
-The next step will be to build a bootstrap installer which installs the necessary device drivers before the service.  To that I will learn:
+The next step will be to build a bootstrap installer which installs the necessary device drivers before the service.s
 
 - http://wixtoolset.org/documentation/manual/v3/bundle/
