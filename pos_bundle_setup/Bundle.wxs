@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Bundle Name="AlikaPosBundle" Version="1.0.0.0" Manufacturer="Alika Analytics" UpgradeCode="078243ae-9f65-42f6-a2ab-581bb2c6ece8">
+		<BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense" />
+
+		<Chain>
+      <ExePackage
+          DisplayName="3M Device Drivers"
+          SourceFile="..\3M_SDK\1.2.1.2\Drivers\3MSwipeReaderDriversSetup.EXE"
+          InstallCommand="/S"
+          RepairCommand="/S"
+          UninstallCommand="/Z" />
+      <RollbackBoundary />
+      
+      <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_wixsetup.TargetPath)" />
+      
+		</Chain>
+	</Bundle>
+</Wix>

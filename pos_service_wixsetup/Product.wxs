@@ -16,7 +16,7 @@
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
     <MediaTemplate EmbedCab="yes" />
 
-    <Feature Id="ProductFeature" Title="AlikaPosService1" Level="1">
+    <Feature Id="ProductFeature" Title="AlikaPosService" Level="1">
       <ComponentGroupRef Id="COMPONENTS_ALIKA_POS" />
       <ComponentGroupRef Id="COMPONENTS_3M_READER" />
     </Feature>

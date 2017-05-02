@@ -5,11 +5,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pos_hardware_console", "pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pos_hardware_service", "pos_hardware_service\pos_hardware_service.csproj", "{DEAD45F0-3811-4D75-A512-1F9BB879E805}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "pos_service_setup", "pos_service_setup\AlikaPosServiceSetup.vdproj", "{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}"
-EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "pos_service_wixsetup", "pos_service_wixsetup\pos_service_wixsetup.wixproj", "{E5C15A62-6B91-404C-A101-A01F52A7BFE8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pos_hardware_dll", "pos_hardware_dll\pos_hardware_dll.csproj", "{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}"
+EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "pos_bundle_setup", "pos_bundle_setup\pos_bundle_setup.wixproj", "{40449D16-6881-4AA3-B1FF-929EA40DF339}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +25,6 @@ Global
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Debug|x86.Build.0 = Debug|x86
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Release|x86.ActiveCfg = Release|x86
 		{DEAD45F0-3811-4D75-A512-1F9BB879E805}.Release|x86.Build.0 = Release|x86
-		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Debug|x86.ActiveCfg = Debug
-		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Debug|x86.Build.0 = Debug
-		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Release|x86.ActiveCfg = Release
-		{D4017BB6-B2CE-4C3D-BE20-4C32142FD380}.Release|x86.Build.0 = Release
 		{E5C15A62-6B91-404C-A101-A01F52A7BFE8}.Debug|x86.ActiveCfg = Debug|x86
 		{E5C15A62-6B91-404C-A101-A01F52A7BFE8}.Debug|x86.Build.0 = Debug|x86
 		{E5C15A62-6B91-404C-A101-A01F52A7BFE8}.Release|x86.ActiveCfg = Release|x86
@@ -37,6 +33,10 @@ Global
 		{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}.Debug|x86.Build.0 = Debug|x86
 		{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}.Release|x86.ActiveCfg = Release|x86
 		{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}.Release|x86.Build.0 = Release|x86
+		{40449D16-6881-4AA3-B1FF-929EA40DF339}.Debug|x86.ActiveCfg = Debug|x86
+		{40449D16-6881-4AA3-B1FF-929EA40DF339}.Debug|x86.Build.0 = Debug|x86
+		{40449D16-6881-4AA3-B1FF-929EA40DF339}.Release|x86.ActiveCfg = Release|x86
+		{40449D16-6881-4AA3-B1FF-929EA40DF339}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
