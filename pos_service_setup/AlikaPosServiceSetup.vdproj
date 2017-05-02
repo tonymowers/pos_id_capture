@@ -58,12 +58,6 @@
         "Entry"
         {
         "MsmKey" = "8:_22DABDF117E23E00CA678174034A5AC6"
-        "OwnerKey" = "8:_B3E9E0584CFB49F3B69443A88244CB2C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_22DABDF117E23E00CA678174034A5AC6"
         "OwnerKey" = "8:_ECFAE77393BA476F843C59F105D30565"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,12 +83,6 @@
         {
         "MsmKey" = "8:_30230DF70DDF4D9691A6452922A1FBC3"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_382913026718CFC5D519F3DC2C4DA0B3"
-        "OwnerKey" = "8:_B3E9E0584CFB49F3B69443A88244CB2C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -196,12 +184,6 @@
         "Entry"
         {
         "MsmKey" = "8:_9BF46E7BE201D010CC3C4269A3074EE2"
-        "OwnerKey" = "8:_B3E9E0584CFB49F3B69443A88244CB2C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_9BF46E7BE201D010CC3C4269A3074EE2"
         "OwnerKey" = "8:_99F123738E7B99B25FE0C4735FC26624"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -226,12 +208,6 @@
         "Entry"
         {
         "MsmKey" = "8:_AAB894280B7D48CF9D103FAB9540E6CA"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_B3E9E0584CFB49F3B69443A88244CB2C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -335,12 +311,6 @@
         {
         "MsmKey" = "8:_ECFAE77393BA476F843C59F105D30565"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B3E9E0584CFB49F3B69443A88244CB2C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -471,6 +441,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -715,11 +698,6 @@
             "AssemblyAsmDisplayName" = "8:MMMReaderDotNet40, Version=4.3.6.0, Culture=neutral, PublicKeyToken=628dd6318974115c, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_22DABDF117E23E00CA678174034A5AC6"
-                    {
-                    "Name" = "8:MMMReaderDotNet40.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:MMMReaderDotNet40.dll"
             "TargetName" = "8:"
@@ -888,11 +866,6 @@
             "AssemblyAsmDisplayName" = "8:RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_5D5D47B7A5B7E3DDF99916A2E008B160"
-                    {
-                    "Name" = "8:RestSharp.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:RestSharp.dll"
             "TargetName" = "8:"
@@ -1121,11 +1094,6 @@
             "AssemblyAsmDisplayName" = "8:AlikaPosHardware, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86"
                 "ScatterAssemblies"
                 {
-                    "_99F123738E7B99B25FE0C4735FC26624"
-                    {
-                    "Name" = "8:AlikaPosHardware.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:AlikaPosHardware.dll"
             "TargetName" = "8:"
@@ -1203,7 +1171,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -2535,34 +2503,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B3E9E0584CFB49F3B69443A88244CB2C"
-            {
-            "SourcePath" = "8:..\\pos_hardware\\obj\\x86\\Debug\\AlikaPosHardware.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_6D0E7B1E7C87493394FA1F903178F80A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_ECFAE77393BA476F843C59F105D30565"
             {
             "SourcePath" = "8:..\\pos_hardware_service\\obj\\x86\\Debug\\AlikaPosService.exe"

@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pos_hardware\pos_hardware.csproj">
+    <ProjectReference Include="..\pos_hardware_dll\pos_hardware_dll.csproj">
       <Project>{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}</Project>
-      <Name>pos_hardware</Name>
+      <Name>pos_hardware_dll</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

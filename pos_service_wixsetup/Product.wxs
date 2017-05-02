@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The name of the product -->
+<?define Name = "AlikaPosService" ?>
+<!-- The manufacturer, for setup package publisher and folder info -->
+<?define Manufacturer = "Alika Analytics" ?>
+<!-- The version number of this setup package-->
+<?define Version = "1.0.1" ?>
+<!-- UpgradeCode must be unique and not changed once the first version of the program is installed. -->
+<?define UpgradeCode = "{458daa77-6451-4ac2-add7-42c316cd5ab2}" ?>
+<!-- 3M sdk -->
+<?define SDK_3M = "..\3M_SDK\1.2.1.2" ?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="{A640B013-FD6D-4FFB-A8F9-915C6C478C4D}" Name="$(var.Name)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Feature Id="ProductFeature" Title="AlikaPosService1" Level="1">
+      <ComponentGroupRef Id="COMPONENTS_ALIKA_POS" />
+      <ComponentGroupRef Id="COMPONENTS_3M_READER" />
+    </Feature>
+  </Product>
+
+  <Fragment>
+    <!--Directory structure definition for target installation -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
+          <Directory Id="INSTALLFOLDER" Name="$(var.Name)" >
+            <Directory Id="DIR_BIN" Name="bin"/>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <!--Component group definitions -->
+    <!-- -->
+    <ComponentGroup Id="COMPONENTS_ALIKA_POS" Directory="DIR_BIN">
+      <!-- Components built by Alika Analytics AG for point-of-sale system -->
+      <Component Id="Service_CMP">
+        <!-- Alika point-of-sale windows service for interacting with point of sale hardware -->
+        <File Id="$(var.pos_hardware_service.TargetFileName)" Source="$(var.pos_hardware_service.TargetPath)" KeyPath="yes" />
+        <ServiceInstall Id="ServiceInstaller"
+          Type="ownProcess"
+          Name="$(var.Name)"
+          Account="LocalSystem"
+          DisplayName="Alika Point-Of-Sale Service"
+          Description="A point of sale service for using 3M Readers and other point-of-sale hardware."
+          Start="auto"
+          ErrorControl="normal" />
+        <!-- Tell WiX to start the Service -->
+        <ServiceControl
+          Id="StartService"
+          Start="install"
+          Stop="both"
+          Remove="uninstall"
+          Name="$(var.Name)"
+          Wait="yes" />
+
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+        <RemoveFile Id="ALLFILES_Service" Name="*.*" On="both" />
+      </Component>
+      
+      <Component Id="Console_CMP">
+        <!-- Console tool for debugging hardware connectivity-->
+        <File Id="$(var.pos_hardware_console.TargetFileName)" Source="$(var.pos_hardware_console.TargetPath)" KeyPath="yes" />
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+        <RemoveFile Id="ALLFILES_Console" Name="*.*" On="both" />
+      </Component>
+      
+      <Component Id="POS_DLL_CMP" >
+        <!--Alika point-of-sale DLL that implements most of functionality used by console and service components -->
+        <File Id="$(var.pos_hardware_dll.TargetFileName)" Source="$(var.pos_hardware_dll.TargetPath)" KeyPath="yes"/>
+      </Component>
+      <Component Id="RestSharp_CMP" >
+        <File Id="RestSharp.dll" Source="$(var.pos_hardware_dll.TargetDir)\RestSharp.dll" KeyPath="yes"/>
+      </Component>
+      <Component Id="Newtonsof.Json_CMP">
+        <File Id="Newtonsoft.Json.dll" Source="$(var.pos_hardware_dll.TargetDir)\Newtonsoft.Json.dll" KeyPath="yes"/>
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="COMPONENTS_3M_READER">
+      <ComponentGroupRef Id="SDK_3M_BIN"/>
+    </ComponentGroup>
+
+    <ComponentGroup Id="SDK_3M_BIN" Directory="DIR_BIN">
+      <!-- 3M DLLs for using CR100 Swipe Reader -->
+      <Component Id="cmp0AE1F70A47657D41B7419FCEEF06265F">
+        <File Id="fil5D23C82E41E9A1DB989D0AE6DF2BB5BC" KeyPath="yes" Source="$(var.SDK_3M)\bin\mfc100u.dll" />
+      </Component>
+
+      <Component Id="cmp149729E5CFF32288F3680D69917D2090">
+        <File Id="fil08EB3DEE571B02D929C23F7D5EFDC5A7" KeyPath="yes" Source="$(var.SDK_3M)\bin\ErrorHandlerDll.dll" />
+      </Component>
+
+      <Component Id="cmp25B0CE1DAD4738FED7D4AA03B54C83B6" >
+        <File Id="filADDD0F32244796F0496CE4853A922EF8" KeyPath="yes" Source="$(var.SDK_3M)\bin\msvcr100.dll" />
+      </Component>
+      <Component Id="cmp356B50B933E5CD01C4354C6A7B5C63E3" >
+        <File Id="fil24AA87A44286D1376B539B2BDBC95FAE" KeyPath="yes" Source="$(var.SDK_3M)\bin\7za.dll" />
+      </Component>
+      <Component Id="cmp35D52ECD6F6C0198CE89F6C2A23993DB" >
+        <File Id="filEA2CD37C19CDB1493EB6571CD063B764" KeyPath="yes" Source="$(var.SDK_3M)\bin\MMMReader.ini" />
+      </Component>
+      <Component Id="cmp42E400DB4291296A31FBC9D1C90C01E0" >
+        <File Id="fil232DD4BB4CF41D70D4C42AEAF30E4328" KeyPath="yes" Source="$(var.SDK_3M)\bin\MMMReaderDotNet40.dll" />
+      </Component>
+      <Component Id="cmp655161C71D994142A15DE9BA7631DE96" >
+        <File Id="fil08F9AE3CA7C80E84E208242B6D49AB73" KeyPath="yes" Source="$(var.SDK_3M)\bin\SwipeProtocolsDll.dll" />
+      </Component>
+      <Component Id="cmp8A24EC883870900FA2E3A57B12B490EB" >
+        <File Id="fil48429719B11436AB46A5ACA96703B78D" KeyPath="yes" Source="$(var.SDK_3M)\bin\msvcp100.dll" />
+      </Component>
+
+      <Component Id="cmpDE1CBBB31954EF6D03E7D0B4E17B3AB2" >
+        <File Id="filA70EBEBCE5CC4D0DA4DFE6A0F7848077" KeyPath="yes" Source="$(var.SDK_3M)\bin\atl100.dll" />
+      </Component>
+
+      <Component Id="cmpE29D7DECBDB5B0FCD1D6D0FC24ADB188" >
+        <File Id="fil659491E64E930589804D2A9D09F8AA4A" KeyPath="yes" Source="$(var.SDK_3M)\bin\SettingsDll.dll" />
+      </Component>
+
+      <Component Id="cmpF39EDEE5118CB8464340BA272201DBC3" >
+        <File Id="fil666B9C05FAE40D85E3D21755D5E72C09" KeyPath="yes" Source="$(var.SDK_3M)\bin\CommDataDll.dll" />
+      </Component>
+
+      <Component Id="cmpCCF795539FE3FEF2CC997B0051975BC1" >
+        <File Id="fil1949F98335B69B11C368BF22FAC85285" KeyPath="yes" Source="$(var.SDK_3M)\bin\DeviceDll.dll" />
+      </Component>
+
+      <Component Id="cmpCB4AB1B62838C074F9A196412C11F407" >
+        <File Id="fil0FAD49A4FD8195A323F998B2710092B8" KeyPath="yes" Source="$(var.SDK_3M)\bin\MMMReaderLowLevelAPI.dll" />
+      </Component>
+
+      <Component Id="cmpAD6CFD8D4327BF59371BF38386822375" >
+        <File Id="filCBCB6545273C9BD4E0D519B35B28D4B9" KeyPath="yes" Source="$(var.SDK_3M)\bin\mfc100.dll" />
+      </Component>
+    </ComponentGroup>
+
+  </Fragment>
+</Wix>
