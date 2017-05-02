@@ -1,9 +1,0 @@
-﻿*.suo
-*.user
-_ReSharper.*
-bin
-obj
-Logs
-packages
-Debug
-Release
