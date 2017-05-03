@@ -8,3 +8,4 @@ This project builds a bundle installer.  The installer will run the
 The following resources were used to learn about how to build a bundle installer:
 
 - https://www.firegiant.com/wix/tutorial/net-and-net/bootstrapping/
+- https://github.com/frederiksen/Classic-WiX-Burn-Theme/tree/master/Samples

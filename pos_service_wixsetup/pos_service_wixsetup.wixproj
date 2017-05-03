@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>{e5c15a62-6b91-404c-a101-a01f52a7bfe8}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>AlikaPosService1</OutputName>
+    <OutputName>AlikaPosService</OutputName>
     <OutputType>Package</OutputType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">

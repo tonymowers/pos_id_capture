@@ -49,7 +49,7 @@ namespace CH.Alika.POS.Hardware
                 Method = "ci_put",
                 Params = new Dictionary<string, object>()
                 {
-                   { "sourceID" , "shopA" },
+                   { "sourceID" , Settings.SourceId },
                    { "codeLineData" , codeLineData }
                 }
             });
@@ -71,5 +71,6 @@ namespace CH.Alika.POS.Hardware
     class ScanStoreConfig
     {
         public String BaseUrl { get; set; }
+        public String SourceId { get; set; }
     }
 }
