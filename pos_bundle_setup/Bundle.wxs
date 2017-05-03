@@ -10,9 +10,9 @@
       <bal:WixStandardBootstrapperApplication LicenseFile="License.rtf" LogoFile="LogoWithText64x64.png" />
     </BootstrapperApplicationRef>
     
-      <util:RegistrySearch Id="RegSearch" Root="HKLM" Key="System\CurrentControlSet\services\3MUSBSerial64" Variable="INSTALLED_3M_DRIVER" Result="exists"/>
+      <util:RegistrySearch Id="RegSearch" Root="HKLM" Key="System\CurrentControlSet\services\3MUSBSerial64" Variable="IS_INSTALLED_3M_DRIVER" Result="exists"/>
     <!-- 
-    <bal:Condition Message="Debug: 3M Driver Key found [INSTALLED_3M_DRIVER]">
+    <bal:Condition Message="Debug: 3M Driver Key found [IS_INSTALLED_3M_DRIVER]">
       1 = 2
     </bal:Condition>
     -->
@@ -24,7 +24,7 @@
           InstallCommand="/S"
           RepairCommand="/S"
           UninstallCommand="/Z" 
-          InstallCondition="(NOT INSTALLED_3M_DRIVER = 1)"/>
+          InstallCondition="(NOT IS_INSTALLED_3M_DRIVER = 1)"/>
       <RollbackBoundary />
       
       <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_wixsetup.TargetPath)" />
