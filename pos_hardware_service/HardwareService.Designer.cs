@@ -1,6 +1,6 @@
 ﻿namespace CH.Alika.POS.Service
 {
-    partial class HardwareService
+    public partial class HardwareService
     {
         /// <summary> 
         /// Required designer variable.

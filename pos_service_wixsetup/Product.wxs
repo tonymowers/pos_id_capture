@@ -63,14 +63,14 @@
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
         <RemoveFile Id="ALLFILES_Service" Name="*.*" On="both" />
       </Component>
-      
+
       <Component Id="Console_CMP">
         <!-- Console tool for debugging hardware connectivity-->
         <File Id="$(var.pos_hardware_console.TargetFileName)" Source="$(var.pos_hardware_console.TargetPath)" KeyPath="yes" />
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
         <RemoveFile Id="ALLFILES_Console" Name="*.*" On="both" />
       </Component>
-      
+
       <Component Id="POS_DLL_CMP" >
         <!--Alika point-of-sale DLL that implements most of functionality used by console and service components -->
         <File Id="$(var.pos_hardware_dll.TargetFileName)" Source="$(var.pos_hardware_dll.TargetPath)" KeyPath="yes"/>
@@ -81,6 +81,12 @@
       <Component Id="Newtonsof.Json_CMP">
         <File Id="Newtonsoft.Json.dll" Source="$(var.pos_hardware_dll.TargetDir)\Newtonsoft.Json.dll" KeyPath="yes"/>
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
+      <Component Id="AlikaPosRemote_CMP">
+        <!-- Console tool for debugging hardware connectivity-->
+        <File Id="$(var.pos_remote_dll.TargetFileName)" Source="$(var.pos_remote_dll.TargetPath)" KeyPath="yes" />
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+        <RemoveFile Id="ALLFILES_Remote" Name="*.*" On="both" />
       </Component>
     </ComponentGroup>
 

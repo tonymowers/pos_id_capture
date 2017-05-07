@@ -7,10 +7,17 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using CH.Alika.POS.Hardware;
+using System.ServiceModel;
+using CH.Alika.POS.Remote;
+using System.ServiceModel.Description;
 
 namespace CH.Alika.POS.Service
 {
     //
+    // For Services
+    // https://msdn.microsoft.com/en-us/library/ms734712.aspx
+    // https://www.codeproject.com/Articles/86007/ways-to-do-WCF-instance-management-Per-call-Per
+
     // For walkthrough of how to build a Windows Service
     // See: https://msdn.microsoft.com/en-us/library/zt39148a(v=vs.110).aspx
     //
@@ -30,15 +37,30 @@ namespace CH.Alika.POS.Service
     // To manage services
     // Type in start menu: services.msc
     //
-    public partial class HardwareService : ServiceBase
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
+    public partial class HardwareService : ServiceBase, IScanner
+  
     {
         private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
         private MMMDocumentScanner scanner = null;
         private IScanSink scanSink = null;
+        private ServiceHost serviceHost = null;
+        private ISubscriber subscriber = null;
 
         public HardwareService()
         {
             InitializeComponent();
+        }
+        public void Subscribe()
+        {
+            subscriber = OperationContext.Current.GetCallbackChannel<ISubscriber>();
+            EventLog.WriteEntry(this.ServiceName, "subscribe called");
+        }
+
+        public void Unsubscribe()
+        {
+            subscriber = null;
+            EventLog.WriteEntry(this.ServiceName, "unsubscribe called");
         }
 
         protected override void OnStart(string[] args)
@@ -48,12 +70,16 @@ namespace CH.Alika.POS.Service
             {
                 scanner = new MMMDocumentScanner();
                 scanSink = new ScanSinkWebService(_configFileName);
-                scanSink.OnScanSinkEvent += HandleScanSinkEvent;
-                scanner.OnCodeLineScanEvent += scanSink.HandleCodeLineScan;
+                serviceHost = RemoteFactory.CreateServiceHost(this);
+                BindSourceToSink(scanner,scanSink);
+
+                serviceHost.Open();
                 scanner.Activate();
             }
             catch (Exception e)
             {
+                EventLog.WriteEntry(this.ServiceName, e.Message,
+                                       System.Diagnostics.EventLogEntryType.Warning);
                 EventLog.WriteEntry(this.ServiceName, e.StackTrace,
                                        System.Diagnostics.EventLogEntryType.Warning);
                 OnStop();
@@ -61,23 +87,61 @@ namespace CH.Alika.POS.Service
             }
         }
 
+        private ServiceHost CreateRemoteServiceHost()
+        {
+            String pipeLocation = "net.pipe://localhost/AlikaPosService/Scanner";
+            ServiceHost selfHost = new ServiceHost(this);
+            selfHost.AddServiceEndpoint(typeof(IScanner), new NetNamedPipeBinding(NetNamedPipeSecurityMode.None), pipeLocation);
+            ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+            smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
+            selfHost.Description.Behaviors.Add(smb);
+
+            // Add MEX endpoint
+            selfHost.AddServiceEndpoint(
+                ServiceMetadataBehavior.MexContractName,
+                MetadataExchangeBindings.CreateMexNamedPipeBinding(),
+                pipeLocation + "/mex"
+                );
+            return selfHost;
+        }
+
+        private void BindSourceToSink(IScanSource scanSource, IScanSink scanSink)
+        {
+            scanSink.OnScanSinkEvent += HandleScanSinkEvent;
+            scanner.OnCodeLineScanEvent += HandleCodeLineScan;
+        }
+
+        private void HandleCodeLineScan(object sender, CodeLineScanEvent e)
+        {
+            if (subscriber != null)
+            {
+                subscriber.OnScanEvent();
+            }
+            scanSink.HandleCodeLineScan(sender, e);
+        }
+
         private void HandleScanSinkEvent(object sender, ScanSinkEvent e)
         {
-            Console.WriteLine(e);
             if (e.IsException)
             {
                 EventLog.WriteEntry(this.ServiceName, e.Exception.Message,
                                        System.Diagnostics.EventLogEntryType.Warning, 101);
+                return;
             }
-            else
+            if (subscriber != null)
             {
-                EventLog.WriteEntry(this.ServiceName, "Scan delivered successfully",
-                                       System.Diagnostics.EventLogEntryType.Information, 100);
+                subscriber.OnScanDeliveredEvent();
             }
         }
 
         protected override void OnStop()
         {
+            if (serviceHost != null)
+            {
+                serviceHost.Close();
+                serviceHost = null;
+            }
+                
             cleanup(scanner);
             scanner = null;
             cleanup(scanSink);

@@ -38,6 +38,7 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -73,6 +74,10 @@
     <ProjectReference Include="..\pos_hardware_dll\pos_hardware_dll.csproj">
       <Project>{F1B23B12-2FD4-4A30-B07C-A739EDB4C552}</Project>
       <Name>pos_hardware_dll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\pos_remote_dll\pos_remote_dll.csproj">
+      <Project>{3E73B3B7-E1AF-49A6-96FE-8DBA62BC5D35}</Project>
+      <Name>pos_remote_dll</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
