@@ -48,9 +48,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteFactory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Readme.md" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
