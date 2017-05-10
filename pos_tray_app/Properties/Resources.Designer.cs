@@ -59,5 +59,15 @@ namespace CH.Alika.POS.TrayApp.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon TrayIcon64x64 {
+            get {
+                object obj = ResourceManager.GetObject("TrayIcon64x64", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
     }
 }
