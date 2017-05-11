@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using CH.Alika.POS.Remote.Logging;
 
 namespace CH.Alika.POS.Remote
 {
     public class RemoteFactory
     {
+        private static readonly ILog log = LogProvider.For<RemoteFactory>();
         public readonly static String PipeLocation = "net.pipe://localhost/AlikaPosService/Scanner";
 
         public static DuplexChannelFactory<IScanner> CreateClientFactory(ISubscriber subscriber)
         {
+            log.DebugFormat("Create channel Factory for pipe [{0}]",PipeLocation);
             return new DuplexChannelFactory<IScanner>(
                     subscriber,
                     new NetNamedPipeBinding(NetNamedPipeSecurityMode.None),
@@ -21,6 +24,7 @@ namespace CH.Alika.POS.Remote
 
         public static ServiceHost CreateServiceHost(IScanner scanner)
         {
+            log.DebugFormat("Create service host at [{0}]", PipeLocation);
             ServiceHost selfHost = new ServiceHost(scanner);
             selfHost.AddServiceEndpoint(typeof(IScanner), new NetNamedPipeBinding(NetNamedPipeSecurityMode.None), PipeLocation);
             ServiceMetadataBehavior smb = new ServiceMetadataBehavior();

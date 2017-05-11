@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using CH.Alika.POS.Hardware;
 
-namespace CH.Alika.POS
+namespace CH.Alika.POS.Hardware
 {
     class Program
     {

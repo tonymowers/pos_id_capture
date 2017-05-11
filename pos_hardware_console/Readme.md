@@ -10,4 +10,11 @@ To run the proxy mode start the console without any command line parameters. (Al
 
 To run the local server start the console with any command line parameter. (AlikaPosService Windows Service must NOT be running)
 
+## Logging is implemented using the Log4Net logging framework
+
+
+See: 
+- https://logging.apache.org/log4net/
+- https://www.codeproject.com/Articles/140911/log-net-Tutorial
+
  
