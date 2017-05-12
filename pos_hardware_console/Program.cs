@@ -23,7 +23,7 @@ namespace CH.Alika.POS.ConsoleApp
 
         public void Activate()
         {
-            log.Info("Activating connection to remote windows service based scanner and web service");
+            log.InfoFormat("Activating hardware subscription [{0}]",RemoteFactory.PipeLocation);
             clientFactory = RemoteFactory.CreateClientFactory(this);
             client = clientFactory.CreateChannel();
             client.Subscribe();
@@ -47,14 +47,27 @@ namespace CH.Alika.POS.ConsoleApp
             log.Info("Disposing of service proxy");
             if (client != null)
             {
-                client.Unsubscribe();
-                client = null;
+                try
+                {
+                    client.Unsubscribe();
+                } catch(Exception) { }
+                finally
+                {
+                    client = null;
+                }
             };
 
             if (clientFactory != null)
             {
-                clientFactory.Close();
-                clientFactory = null;
+                try
+                {
+                    clientFactory.Close();
+                }
+                catch (Exception) { }
+                finally
+                {
+                    clientFactory = null;
+                }
             }
         }
 
@@ -130,15 +143,14 @@ namespace CH.Alika.POS.ConsoleApp
             {
                 try
                 {
+                    log.InfoFormat("Activate hardware event subscriber [{0}]", scanner);
                     scanner.Activate();
                     Console.WriteLine(scanner);
                     Console.ReadLine();
                 }
                 catch (Exception e)
                 {
-                    log.Error(scanner);
-                    log.Error("Failure while tring to connect to scanner", e);
-
+                    log.FatalFormat("Failure to activate subscriber [{0}] exception [{1}]", scanner, e);
                 }
             }
 

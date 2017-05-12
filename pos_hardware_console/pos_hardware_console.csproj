@@ -67,7 +67,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AlikaPosConsole.exe.log4net" />
+    <None Include="AlikaPosConsole.exe.log4net">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Readme.md" />
   </ItemGroup>
