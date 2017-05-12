@@ -11,6 +11,17 @@ namespace CH.Alika.POS.Hardware
         public void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
             Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(e));
+            if (OnScanSinkEvent != null)
+            {
+                try
+                {
+                    OnScanSinkEvent(this, new ScanSinkEvent("Scan delivered to console"));
+                }
+                catch
+                {
+
+                }
+            }
         }
 
         public void Dispose()

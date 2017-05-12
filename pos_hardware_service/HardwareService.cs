@@ -10,6 +10,7 @@ using CH.Alika.POS.Hardware;
 using System.ServiceModel;
 using CH.Alika.POS.Remote;
 using System.ServiceModel.Description;
+using CH.Alika.POS.Service.Logging;
 
 namespace CH.Alika.POS.Service
 {
@@ -41,7 +42,8 @@ namespace CH.Alika.POS.Service
     public partial class HardwareService : ServiceBase, IScanner
   
     {
-        private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
+        private static readonly ILog log = LogProvider.For<HardwareService>();
+        private static readonly String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
         private MMMDocumentScanner scanner = null;
         private IScanSink scanSink = null;
         private ServiceHost serviceHost = null;
@@ -53,12 +55,14 @@ namespace CH.Alika.POS.Service
         }
         public void Subscribe()
         {
+            log.Info("Remote client subscribed");
             subscriber = OperationContext.Current.GetCallbackChannel<ISubscriber>();
             EventLog.WriteEntry(this.ServiceName, "subscribe called");
         }
 
         public void Unsubscribe()
         {
+            log.Info("Remote client unsubscribed");
             subscriber = null;
             EventLog.WriteEntry(this.ServiceName, "unsubscribe called");
         }
@@ -66,6 +70,7 @@ namespace CH.Alika.POS.Service
         protected override void OnStart(string[] args)
         {
             base.OnStart(args);
+            log.Info("Service starting");
             try
             {
                 scanner = new MMMDocumentScanner();
@@ -75,9 +80,11 @@ namespace CH.Alika.POS.Service
 
                 serviceHost.Open();
                 scanner.Activate();
+                log.Info("Service started");
             }
             catch (Exception e)
             {
+                log.ErrorFormat("Service exception while starting [{0}]",e);
                 EventLog.WriteEntry(this.ServiceName, e.Message,
                                        System.Diagnostics.EventLogEntryType.Warning);
                 EventLog.WriteEntry(this.ServiceName, e.StackTrace,
@@ -85,24 +92,6 @@ namespace CH.Alika.POS.Service
                 OnStop();
                 throw e;
             }
-        }
-
-        private ServiceHost CreateRemoteServiceHost()
-        {
-            String pipeLocation = "net.pipe://localhost/AlikaPosService/Scanner";
-            ServiceHost selfHost = new ServiceHost(this);
-            selfHost.AddServiceEndpoint(typeof(IScanner), new NetNamedPipeBinding(NetNamedPipeSecurityMode.None), pipeLocation);
-            ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
-            smb.MetadataExporter.PolicyVersion = PolicyVersion.Policy15;
-            selfHost.Description.Behaviors.Add(smb);
-
-            // Add MEX endpoint
-            selfHost.AddServiceEndpoint(
-                ServiceMetadataBehavior.MexContractName,
-                MetadataExchangeBindings.CreateMexNamedPipeBinding(),
-                pipeLocation + "/mex"
-                );
-            return selfHost;
         }
 
         private void BindSourceToSink(IScanSource scanSource, IScanSink scanSink)
@@ -113,29 +102,64 @@ namespace CH.Alika.POS.Service
 
         private void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
+            // TODO consider doing the two tasks in parallel
+            log.InfoFormat("Begin processing Scan", e);
             if (subscriber != null)
             {
-                subscriber.OnScanEvent();
+                try
+                {
+                    log.InfoFormat("Begin Scan callback trigger [{0}]", e);
+                    subscriber.OnScanEvent();
+                    log.Info("End Scan callback trigger ");
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
+                    log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
+                }
             }
-            scanSink.HandleCodeLineScan(sender, e);
+            try
+            {
+                scanSink.HandleCodeLineScan(sender, e);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Exception durning deliverying scan [{0}]", ex);
+            }
+            log.InfoFormat("End processing Scan", e);
         }
 
         private void HandleScanSinkEvent(object sender, ScanSinkEvent e)
         {
+            log.InfoFormat("Begin handling Scan delivery result [{0}]", e);
             if (e.IsException)
             {
+                log.InfoFormat("Create Windows Event Log Entry of [{0}]",e);
                 EventLog.WriteEntry(this.ServiceName, e.Exception.Message,
                                        System.Diagnostics.EventLogEntryType.Warning, 101);
                 return;
             }
             if (subscriber != null)
             {
-                subscriber.OnScanDeliveredEvent();
+                
+                try
+                {
+                    log.InfoFormat("Scan delivery result trigger callback [{0}]", e);
+                    subscriber.OnScanDeliveredEvent();
+                    log.Info("Scan delivery result trigger callback completed");
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat("Failed to complete delivery notification [{0}]", e);
+                    log.ErrorFormat("Exception during delivery notification [{0}]", ex);
+                }
             }
+            log.Info("End handling Scan delivery result ");
         }
 
         protected override void OnStop()
         {
+            log.Info("Service stopping");
             if (serviceHost != null)
             {
                 serviceHost.Close();
@@ -146,10 +170,12 @@ namespace CH.Alika.POS.Service
             scanner = null;
             cleanup(scanSink);
             scanSink = null;
+            log.Info("Service stopped");
         }
 
         private void cleanup(IDisposable resource)
         {
+            log.DebugFormat("Disposing of resource [{0}]", resource);
             if (resource != null)
             {
                 try

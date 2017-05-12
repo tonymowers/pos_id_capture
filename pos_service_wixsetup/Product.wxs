@@ -63,25 +63,45 @@
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
         <RemoveFile Id="ALLFILES_Service" Name="*.*" On="both" />
       </Component>
-
+      
+      <Component Id="ServiceLogConfig_CMP">
+        <File Id="AlikaPosService.exe.log4net" Source="$(var.pos_hardware_service.TargetDir)\AlikaPosService.exe.log4net" KeyPath="yes"/>
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
+      
       <Component Id="Console_CMP">
         <!-- Console tool for debugging hardware connectivity-->
         <File Id="$(var.pos_hardware_console.TargetFileName)" Source="$(var.pos_hardware_console.TargetPath)" KeyPath="yes" />
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
         <RemoveFile Id="ALLFILES_Console" Name="*.*" On="both" />
       </Component>
+      
+      <Component Id="log4net_CMP">
+        <File Id="log4net.dll" Source="$(var.pos_hardware_console.TargetDir)\log4net.dll" KeyPath="yes"/>
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
 
+      <Component Id="ConsoleLogConfig_CMP">
+        <File Id="AlikaPosConsole.exe.log4net" Source="$(var.pos_hardware_console.TargetDir)\AlikaPosConsole.exe.log4net" KeyPath="yes"/>
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
+      
       <Component Id="POS_DLL_CMP" >
         <!--Alika point-of-sale DLL that implements most of functionality used by console and service components -->
         <File Id="$(var.pos_hardware_dll.TargetFileName)" Source="$(var.pos_hardware_dll.TargetPath)" KeyPath="yes"/>
       </Component>
+      
       <Component Id="RestSharp_CMP" >
         <File Id="RestSharp.dll" Source="$(var.pos_hardware_dll.TargetDir)\RestSharp.dll" KeyPath="yes"/>
       </Component>
+      
       <Component Id="Newtonsof.Json_CMP">
         <File Id="Newtonsoft.Json.dll" Source="$(var.pos_hardware_dll.TargetDir)\Newtonsoft.Json.dll" KeyPath="yes"/>
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
       </Component>
+
+      
+      
       <Component Id="AlikaPosRemote_CMP">
         <!-- Console tool for debugging hardware connectivity-->
         <File Id="$(var.pos_remote_dll.TargetFileName)" Source="$(var.pos_remote_dll.TargetPath)" KeyPath="yes" />
