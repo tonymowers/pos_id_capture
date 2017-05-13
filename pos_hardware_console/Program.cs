@@ -44,9 +44,9 @@ namespace CH.Alika.POS.ConsoleApp
             log.Info("Terminating AlikaPosConsole Application");
         }
 
-        static IScanner CreateScanner(bool useServiceProxy)
+        static IScanner CreateScanner(bool useRemotelyLocatedScanner)
         {
-            if (useServiceProxy)
+            if (useRemotelyLocatedScanner)
                 return new ScannerRemotelyLocated();
             else
                 return new ScannerLocallyLocated();
