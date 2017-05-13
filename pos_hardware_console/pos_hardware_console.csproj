@@ -50,8 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
+    <Compile Include="IScanner.cs" />
+    <Compile Include="ScannerLocallyLocated.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScannerRemotelyLocated.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pos_hardware_dll\pos_hardware_dll.csproj">

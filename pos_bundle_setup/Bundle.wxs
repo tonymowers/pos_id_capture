@@ -27,7 +27,7 @@
           InstallCondition="(NOT IS_INSTALLED_3M_DRIVER = 1)"/>
       <RollbackBoundary />
       
-      <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_wixsetup.TargetPath)" />
+      <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_setup.TargetPath)" />
       
 		</Chain>
 	</Bundle>

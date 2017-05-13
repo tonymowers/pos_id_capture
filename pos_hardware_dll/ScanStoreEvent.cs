@@ -5,12 +5,12 @@ using System.Text;
 
 namespace CH.Alika.POS.Hardware
 {
-    public class ScanSinkEvent : EventArgs
+    public class ScanStoreEvent : EventArgs
     {
         private Exception _exception;
         private String response;
 
-        public ScanSinkEvent(String response)
+        public ScanStoreEvent(String response)
         {
             this.response = response;
         }
@@ -21,16 +21,16 @@ namespace CH.Alika.POS.Hardware
         }
         public Exception Exception
         {
-            get { return _exception;  }
+            get { return _exception; }
         }
-        public ScanSinkEvent(Exception ex)
+        public ScanStoreEvent(Exception ex)
         {
             this._exception = ex;
         }
 
         public override string ToString()
         {
-            return "ScanSinkEvent: " + (IsException ? _exception.Message: "scan delivered (" + response + ")");
+            return String.Format("ScanStoreEvent [{0}]", IsException ? _exception.Message : "scan delivered (" + response + ")");
         }
     }
 }

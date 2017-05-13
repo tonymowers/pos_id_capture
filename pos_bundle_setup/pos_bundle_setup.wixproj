@@ -32,20 +32,20 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\pos_service_wixsetup\pos_service_wixsetup.wixproj">
-      <Name>pos_service_wixsetup</Name>
+    <Content Include="License.rtf" />
+    <Content Include="Logo64x64.png" />
+    <Content Include="LogoWithText64x64.png" />
+    <Content Include="Readme.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\pos_service_setup\pos_service_setup.wixproj">
+      <Name>pos_service_setup</Name>
       <Project>{e5c15a62-6b91-404c-a101-a01f52a7bfe8}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="License.rtf" />
-    <Content Include="Logo64x64.png" />
-    <Content Include="LogoWithText64x64.png" />
-    <Content Include="Readme.md" />
   </ItemGroup>
   <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />

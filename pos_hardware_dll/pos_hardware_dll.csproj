@@ -59,14 +59,13 @@
   <ItemGroup>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ConfigNotFoundException.cs" />
-    <Compile Include="ScanSinkConsole.cs" />
-    <Compile Include="IScanSink.cs" />
+    <Compile Include="IScanStore.cs" />
     <Compile Include="IScanSource.cs" />
-    <Compile Include="MMMDocumentScanner.cs" />
+    <Compile Include="MMMCR100SwipeReader.cs" />
     <Compile Include="PosHardwareException.cs" />
-    <Compile Include="ScanSinkEvent.cs" />
-    <Compile Include="ScanSinkWebService.cs" />
-    <Compile Include="ScanStoreApi.cs" />
+    <Compile Include="ScanStoreEvent.cs" />
+    <Compile Include="ScanStoreCloudProxy.cs" />
+    <Compile Include="ScanStoreRestImpl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CodeLineScanEvent.cs" />

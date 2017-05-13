@@ -7,10 +7,10 @@ using System.IO;
 
 namespace CH.Alika.POS.Hardware
 {
-    public class ScanStoreApi
+    public class ScanStoreRestImpl
     {
         private ScanStoreConfig Settings;
-        public ScanStoreApi(String configFileName)
+        public ScanStoreRestImpl(String configFileName)
         {
             try
             {

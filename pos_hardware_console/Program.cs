@@ -10,123 +10,9 @@ using CH.Alika.POS.ConsoleApp.Logging;
 [assembly: log4net.Config.XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace CH.Alika.POS.ConsoleApp
 {
-    interface IScanner : IDisposable
-    {
-        void Activate();
-    }
+  
 
-    class WindowsServiceProxy : IScanner, ISubscriber, IDisposable
-    {
-        private static readonly ILog log = LogProvider.For<WindowsServiceProxy>();
-        CH.Alika.POS.Remote.IScanner client;
-        DuplexChannelFactory<CH.Alika.POS.Remote.IScanner> clientFactory;
-
-        public void Activate()
-        {
-            log.InfoFormat("Activating hardware subscription [{0}]",RemoteFactory.PipeLocation);
-            clientFactory = RemoteFactory.CreateClientFactory(this);
-            client = clientFactory.CreateChannel();
-            client.Subscribe();
-        }
-
-        public void OnScanEvent()
-        {
-            log.Info("Scan event detected");
-            Console.WriteLine("document scanned");
-        }
-
-        public void OnScanDeliveredEvent()
-        {
-            log.Info("Document delivery detected");
-            Console.WriteLine("document delivered");
-            SystemSounds.Exclamation.Play();
-        }
-
-        public void Dispose()
-        {
-            log.Info("Disposing of service proxy");
-            if (client != null)
-            {
-                try
-                {
-                    client.Unsubscribe();
-                } catch(Exception) { }
-                finally
-                {
-                    client = null;
-                }
-            };
-
-            if (clientFactory != null)
-            {
-                try
-                {
-                    clientFactory.Close();
-                }
-                catch (Exception) { }
-                finally
-                {
-                    clientFactory = null;
-                }
-            }
-        }
-
-        public override String ToString()
-        {
-            return String.Format("Windows Service Proxy[{0}]", RemoteFactory.PipeLocation);
-        }
-    }
-
-    class LocalScanner : IScanner, IDisposable
-    {
-        private static readonly ILog log = LogProvider.For<LocalScanner>();
-        private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
-        private MMMDocumentScanner scanner;
-        private IScanSink documentSink;
-
-        public void Activate()
-        {
-            log.Info("Activating connection to local 3M Scanner and remote web service for delivery");
-            scanner = new MMMDocumentScanner();
-            documentSink = new ScanSinkWebService(_configFileName);
-            try
-            {
-                documentSink.OnScanSinkEvent += HandleScanSinkEvent;
-                scanner.OnCodeLineScanEvent += documentSink.HandleCodeLineScan;
-                scanner.Activate();
-                Console.WriteLine(scanner);
-            }
-            catch (PosHardwareException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        public void Dispose()
-        {
-            if (documentSink != null)
-            {
-                documentSink.Dispose();
-                documentSink = null;
-            };
-
-            if (scanner != null)
-            {
-                scanner.Dispose();
-                scanner = null;
-            }
-        }
-
-        public override String ToString()
-        {
-            return scanner.ToString();
-        }
-
-        static void HandleScanSinkEvent(object sender, ScanSinkEvent e)
-        {
-            Console.WriteLine(e);
-        }
-    }
+    
 
     class Program
     {
@@ -146,6 +32,7 @@ namespace CH.Alika.POS.ConsoleApp
                     log.InfoFormat("Activate hardware event subscriber [{0}]", scanner);
                     scanner.Activate();
                     Console.WriteLine(scanner);
+                    Console.WriteLine("Scan documents now");
                     Console.ReadLine();
                 }
                 catch (Exception e)
@@ -160,9 +47,9 @@ namespace CH.Alika.POS.ConsoleApp
         static IScanner CreateScanner(bool useServiceProxy)
         {
             if (useServiceProxy)
-                return new WindowsServiceProxy();
+                return new ScannerRemotelyLocated();
             else
-                return new LocalScanner();
+                return new ScannerLocallyLocated();
         }
     }
 }

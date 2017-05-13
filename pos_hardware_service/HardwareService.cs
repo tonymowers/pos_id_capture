@@ -44,8 +44,8 @@ namespace CH.Alika.POS.Service
     {
         private static readonly ILog log = LogProvider.For<HardwareService>();
         private static readonly String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
-        private MMMDocumentScanner scanner = null;
-        private IScanSink scanSink = null;
+        private MMMCR100SwipeReader scanner = null;
+        private IScanStore scanSink = null;
         private ServiceHost serviceHost = null;
         private ISubscriber subscriber = null;
 
@@ -73,8 +73,8 @@ namespace CH.Alika.POS.Service
             log.Info("Service starting");
             try
             {
-                scanner = new MMMDocumentScanner();
-                scanSink = new ScanSinkWebService(_configFileName);
+                scanner = new MMMCR100SwipeReader();
+                scanSink = new ScanStoreCloudProxy(_configFileName);
                 serviceHost = RemoteFactory.CreateServiceHost(this);
                 BindSourceToSink(scanner,scanSink);
 
@@ -94,9 +94,9 @@ namespace CH.Alika.POS.Service
             }
         }
 
-        private void BindSourceToSink(IScanSource scanSource, IScanSink scanSink)
+        private void BindSourceToSink(IScanSource scanSource, IScanStore scanSink)
         {
-            scanSink.OnScanSinkEvent += HandleScanSinkEvent;
+            scanSink.OnScanStoreEvent += HandleScanSinkEvent;
             scanner.OnCodeLineScanEvent += HandleCodeLineScan;
         }
 
@@ -120,7 +120,7 @@ namespace CH.Alika.POS.Service
             }
             try
             {
-                scanSink.HandleCodeLineScan(sender, e);
+                scanSink.CodeLineDataPut(sender, e);
             }
             catch (Exception ex)
             {
@@ -129,7 +129,7 @@ namespace CH.Alika.POS.Service
             log.InfoFormat("End processing Scan", e);
         }
 
-        private void HandleScanSinkEvent(object sender, ScanSinkEvent e)
+        private void HandleScanSinkEvent(object sender, ScanStoreEvent e)
         {
             log.InfoFormat("Begin handling Scan delivery result [{0}]", e);
             if (e.IsException)

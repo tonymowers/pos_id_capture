@@ -13,12 +13,12 @@ namespace CH.Alika.POS.Hardware
         {
             Console.WriteLine("Press enter key to exit");
             Console.WriteLine();
-            using (MMMDocumentScanner scanner = new MMMDocumentScanner())
-            using (IScanSink documentSink = new ScanSinkWebService(_configFileName))
+            using (MMMCR100SwipeReader scanner = new MMMCR100SwipeReader())
+            using (IScanStore documentSink = new ScanStoreCloudProxy(_configFileName))
             {
                 try
                 {
-                    scanner.OnCodeLineScanEvent += documentSink.HandleCodeLineScan;
+                    scanner.OnCodeLineScanEvent += documentSink.CodeLineDataPut;
                     scanner.Activate();
                     Console.WriteLine(scanner);
                 }
