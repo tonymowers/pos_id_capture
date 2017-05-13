@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CH.Alika.POS.Hardware
 {
     public interface IScanStore : IDisposable
     {
         event EventHandler<ScanStoreEvent> OnScanStoreEvent;
-        void CodeLineDataPut(object sender, CodeLineScanEvent e);
+        Task<ScanStoreEvent> CodeLineDataPutAsync(CodeLineScanEvent e);
     }
 }

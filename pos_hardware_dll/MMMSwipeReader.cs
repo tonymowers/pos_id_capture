@@ -9,9 +9,9 @@ using CH.Alika.POS.Hardware.Logging;
 namespace CH.Alika.POS.Hardware
 {
 
-    public class MMMCR100SwipeReader : IScanSource
+    public class MMMSwipeReader : IScanSource
     {
-        private static readonly ILog log = LogProvider.For<MMMCR100SwipeReader>();
+        private static readonly ILog log = LogProvider.For<MMMSwipeReader>();
 
         private MMM.Readers.Modules.Swipe.SwipeSettings swipeSettings;
         public event EventHandler<CodeLineScanEvent> OnCodeLineScanEvent;
@@ -74,7 +74,7 @@ namespace CH.Alika.POS.Hardware
             }
 
             return string.Format(
-                "MMMCR100SwipeReader ProtocolSettings[{0}]",
+                "MMMSwipeReader ProtocolSettings[{0}]",
                 lProtocolName
             );
         }

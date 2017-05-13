@@ -8,17 +8,17 @@ namespace CH.Alika.POS.Hardware
 {
     class Program
     {
-        private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";  
+        private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
         static void Main(string[] args)
         {
             Console.WriteLine("Press enter key to exit");
             Console.WriteLine();
-            using (MMMCR100SwipeReader scanner = new MMMCR100SwipeReader())
-            using (IScanStore documentSink = new ScanStoreCloudProxy(_configFileName))
+            using (MMMSwipeReader scanner = new MMMSwipeReader())
+            using (IScanStore documentSink = new ScanStoreCloud(_configFileName))
             {
                 try
                 {
-                    scanner.OnCodeLineScanEvent += documentSink.CodeLineDataPut;
+                    scanner.OnCodeLineScanEvent += delegate(object sender, CodeLineScanEvent e) { documentSink.CodeLineDataPutAsync(e); };
                     scanner.Activate();
                     Console.WriteLine(scanner);
                 }
@@ -26,7 +26,7 @@ namespace CH.Alika.POS.Hardware
                 {
                     Console.WriteLine(e.Message);
                 }
-                Console.ReadLine();   
+                Console.ReadLine();
             }
         }
 

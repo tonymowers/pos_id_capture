@@ -22,7 +22,6 @@
   
   <root>
     <level value="INFO"/>
-    <appender-ref ref="ConsoleAppender" />
     <appender-ref ref="FileAppender" />
   </root>
 </log4net>

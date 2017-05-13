@@ -11,6 +11,7 @@ using System.ServiceModel;
 using CH.Alika.POS.Remote;
 using System.ServiceModel.Description;
 using CH.Alika.POS.Service.Logging;
+using System.Threading.Tasks;
 
 namespace CH.Alika.POS.Service
 {
@@ -38,13 +39,12 @@ namespace CH.Alika.POS.Service
     // To manage services
     // Type in start menu: services.msc
     //
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public partial class HardwareService : ServiceBase, IScanner
-  
     {
         private static readonly ILog log = LogProvider.For<HardwareService>();
         private static readonly String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
-        private MMMCR100SwipeReader scanner = null;
+        private MMMSwipeReader scanner = null;
         private IScanStore scanSink = null;
         private ServiceHost serviceHost = null;
         private ISubscriber subscriber = null;
@@ -73,10 +73,10 @@ namespace CH.Alika.POS.Service
             log.Info("Service starting");
             try
             {
-                scanner = new MMMCR100SwipeReader();
-                scanSink = new ScanStoreCloudProxy(_configFileName);
+                scanner = new MMMSwipeReader();
+                scanSink = new ScanStoreCloud(_configFileName);
                 serviceHost = RemoteFactory.CreateServiceHost(this);
-                BindSourceToSink(scanner,scanSink);
+                BindSourceToSink(scanner, scanSink);
 
                 serviceHost.Open();
                 scanner.Activate();
@@ -84,7 +84,7 @@ namespace CH.Alika.POS.Service
             }
             catch (Exception e)
             {
-                log.ErrorFormat("Service exception while starting [{0}]",e);
+                log.ErrorFormat("Service exception while starting [{0}]", e);
                 EventLog.WriteEntry(this.ServiceName, e.Message,
                                        System.Diagnostics.EventLogEntryType.Warning);
                 EventLog.WriteEntry(this.ServiceName, e.StackTrace,
@@ -102,31 +102,36 @@ namespace CH.Alika.POS.Service
 
         private void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
-            // TODO consider doing the two tasks in parallel
-            log.InfoFormat("Begin processing Scan", e);
-            if (subscriber != null)
+            // Handle processing of scan in background
+            Task.Factory.StartNew(() =>
             {
+                log.InfoFormat("Begin processing Scan", e);
+
+                if (subscriber != null)
+                {
+                    try
+                    {
+                        log.InfoFormat("Begin Scan callback trigger [{0}]", e);
+                        subscriber.OnScanEvent();
+                        log.Info("End Scan callback trigger ");
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
+                        log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
+                    }
+                }
                 try
                 {
-                    log.InfoFormat("Begin Scan callback trigger [{0}]", e);
-                    subscriber.OnScanEvent();
-                    log.Info("End Scan callback trigger ");
+                    scanSink.CodeLineDataPutAsync(e);
                 }
                 catch (Exception ex)
                 {
-                    log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
-                    log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
+                    log.ErrorFormat("Exception during delivery of scan [{0}]", ex);
                 }
-            }
-            try
-            {
-                scanSink.CodeLineDataPut(sender, e);
-            }
-            catch (Exception ex)
-            {
-                log.ErrorFormat("Exception durning deliverying scan [{0}]", ex);
-            }
-            log.InfoFormat("End processing Scan", e);
+
+                log.InfoFormat("End processing Scan", e);
+            });
         }
 
         private void HandleScanSinkEvent(object sender, ScanStoreEvent e)
@@ -134,14 +139,14 @@ namespace CH.Alika.POS.Service
             log.InfoFormat("Begin handling Scan delivery result [{0}]", e);
             if (e.IsException)
             {
-                log.InfoFormat("Create Windows Event Log Entry of [{0}]",e);
+                log.InfoFormat("Create Windows Event Log Entry of [{0}]", e);
                 EventLog.WriteEntry(this.ServiceName, e.Exception.Message,
                                        System.Diagnostics.EventLogEntryType.Warning, 101);
                 return;
             }
             if (subscriber != null)
             {
-                
+
                 try
                 {
                     log.InfoFormat("Scan delivery result trigger callback [{0}]", e);
@@ -165,7 +170,7 @@ namespace CH.Alika.POS.Service
                 serviceHost.Close();
                 serviceHost = null;
             }
-                
+
             cleanup(scanner);
             scanner = null;
             cleanup(scanSink);

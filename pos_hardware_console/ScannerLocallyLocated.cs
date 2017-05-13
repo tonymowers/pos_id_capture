@@ -11,18 +11,18 @@ namespace CH.Alika.POS.ConsoleApp
     {
         private static readonly ILog log = LogProvider.For<ScannerLocallyLocated>();
         private static String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
-        private MMMCR100SwipeReader scanner;
+        private MMMSwipeReader scanner;
         private IScanStore documentSink;
 
         public void Activate()
         {
             log.Info("Activating connection to local 3M Scanner and remote web service for delivery");
-            scanner = new MMMCR100SwipeReader();
-            documentSink = new ScanStoreCloudProxy(_configFileName);
+            scanner = new MMMSwipeReader();
+            documentSink = new ScanStoreCloud(_configFileName);
             try
             {
                 documentSink.OnScanStoreEvent += HandleScanSinkEvent;
-                scanner.OnCodeLineScanEvent += documentSink.CodeLineDataPut;
+                scanner.OnCodeLineScanEvent += delegate(object sender, CodeLineScanEvent e) { documentSink.CodeLineDataPutAsync(e); };
                 scanner.Activate();
             }
             catch (PosHardwareException e)

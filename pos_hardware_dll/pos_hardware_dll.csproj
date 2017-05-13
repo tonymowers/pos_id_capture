@@ -61,10 +61,10 @@
     <Compile Include="ConfigNotFoundException.cs" />
     <Compile Include="IScanStore.cs" />
     <Compile Include="IScanSource.cs" />
-    <Compile Include="MMMCR100SwipeReader.cs" />
+    <Compile Include="MMMSwipeReader.cs" />
     <Compile Include="PosHardwareException.cs" />
     <Compile Include="ScanStoreEvent.cs" />
-    <Compile Include="ScanStoreCloudProxy.cs" />
+    <Compile Include="ScanStoreCloud.cs" />
     <Compile Include="ScanStoreRestImpl.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
