@@ -16,7 +16,7 @@ namespace CH.Alika.POS.Hardware
         public event EventHandler<ScanStoreEvent> OnScanStoreEvent;
         public ScanStoreCloud(String configFileName)
         {
-            log.InfoFormat("Construct using file [{0}]", configFileName);
+            log.InfoFormat("ScanCloudStore configured using file [{0}]", configFileName);
             _configFileName = configFileName;
         }
 
@@ -47,6 +47,14 @@ namespace CH.Alika.POS.Hardware
 
         private void NotifyListeners(ScanStoreEvent scanStoreEvent)
         {
+            if (scanStoreEvent.IsException)
+            {
+                log.WarnFormat("Notifying listeners of failure puttting scan in cloud [{0}]", scanStoreEvent.Exception.Message);
+            }
+            else
+            {
+                log.Info("Nofitying listeners of success putting scan in cloud");
+            }
             log.DebugFormat("Begin notify listeners of ScanStoreEvent [{0}]", scanStoreEvent);
             try
             {
@@ -58,7 +66,7 @@ namespace CH.Alika.POS.Hardware
 
         public void Dispose()
         {
-            log.Info("Dispose");
+            log.Debug("ScanStoreCloud disposed");
         }
     }
 }
