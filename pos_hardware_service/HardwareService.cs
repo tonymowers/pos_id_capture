@@ -56,14 +56,28 @@ namespace CH.Alika.POS.Service
         public void Subscribe()
         {
             log.Info("Remote client subscribed");
-            subscriber = new SubscriberAsync(OperationContext.Current.GetCallbackChannel<ISubscriber>());
+            subscriber = GetSubscriberAsync(); ;
+            subscriber.Closed += new EventHandler(Subscriber_Closed);
             EventLog.WriteEntry(this.ServiceName, "subscribe called");
         }
 
+        private void Subscriber_Closed(object sender, EventArgs e)
+        {
+            log.Info("Subscriber closed");
+            if (sender.Equals(subscriber)) {
+                log.Debug("Removed subscriber from list of subscribers");
+                subscriber = null;
+            }
+        }
+
+        private SubscriberAsync GetSubscriberAsync()
+        {
+            return new SubscriberAsync(OperationContext.Current.GetCallbackChannel<ISubscriber>());
+        }
         public void Unsubscribe()
         {
             log.Info("Remote client unsubscribed");
-            subscriber = null;
+            Subscriber_Closed(GetSubscriberAsync(),EventArgs.Empty);
             EventLog.WriteEntry(this.ServiceName, "unsubscribe called");
         }
 
@@ -129,7 +143,6 @@ namespace CH.Alika.POS.Service
             }
 
             log.Debug("End processing Scan");
-
         }
 
         private void HandleScanStoreEvent(object sender, ScanStoreEvent e)

@@ -42,7 +42,7 @@ namespace CH.Alika.POS.Hardware
         {
             EventType = ScanSourceEventType.ERROR_EVENT;
             ErrorCode = errorCode;
-            ErrorMessage = errorMessage == null ? "no error message given" : ErrorMessage;
+            ErrorMessage = errorMessage == null ? "no error message given" : errorMessage;
         }
 
         public bool IsError
