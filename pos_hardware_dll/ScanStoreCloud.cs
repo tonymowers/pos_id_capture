@@ -39,7 +39,7 @@ namespace CH.Alika.POS.Hardware
                     }
                     catch (Exception ex)
                     {
-                        log.WarnFormat("Exception while putting scan into cloud [{0}]", ex);
+                        log.WarnFormat("Exception while putting scan into cloud [{0}]", ex.Message);
                         scanStoreEvent = new ScanStoreEvent(ex);
                     }
                     NotifyListeners(scanStoreEvent);

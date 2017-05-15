@@ -47,7 +47,7 @@ namespace CH.Alika.POS.Service
         private MMMSwipeReader scanner = null;
         private IScanStore scanSink = null;
         private ServiceHost serviceHost = null;
-        private ISubscriber subscriber = null;
+        private SubscriberAsync subscriber = null;
 
         public HardwareService()
         {
@@ -56,7 +56,7 @@ namespace CH.Alika.POS.Service
         public void Subscribe()
         {
             log.Info("Remote client subscribed");
-            subscriber = OperationContext.Current.GetCallbackChannel<ISubscriber>();
+            subscriber = new SubscriberAsync(OperationContext.Current.GetCallbackChannel<ISubscriber>());
             EventLog.WriteEntry(this.ServiceName, "subscribe called");
         }
 
@@ -96,70 +96,71 @@ namespace CH.Alika.POS.Service
 
         private void BindSourceToSink(IScanSource scanSource, IScanStore scanSink)
         {
-            scanSink.OnScanStoreEvent += HandleScanSinkEvent;
+            scanSink.OnScanStoreEvent += HandleScanStoreEvent;
             scanner.OnCodeLineScanEvent += HandleCodeLineScan;
         }
 
         private void HandleCodeLineScan(object sender, CodeLineScanEvent e)
         {
-            // Handle processing of scan in background
-            Task.Factory.StartNew(() =>
-            {
-                log.InfoFormat("Begin processing Scan", e);
+            log.Info("Handling CodeLineScan");
+            log.DebugFormat("Begin processing Scan", e);
 
-                if (subscriber != null)
-                {
-                    try
-                    {
-                        log.InfoFormat("Begin Scan callback trigger [{0}]", e);
-                        subscriber.OnScanEvent();
-                        log.Info("End Scan callback trigger ");
-                    }
-                    catch (Exception ex)
-                    {
-                        log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
-                        log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
-                    }
-                }
+            if (subscriber != null)
+            {
                 try
                 {
-                    scanSink.CodeLineDataPutAsync(e);
+                    log.Info("Notifying subscriber asynchronously of scanned document");
+                    subscriber.NotifySubscriberAsync(e);
                 }
                 catch (Exception ex)
                 {
-                    log.ErrorFormat("Exception during delivery of scan [{0}]", ex);
+                    log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
+                    log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
                 }
+            }
+            try
+            {
+                log.Info("Putting scanned document asynchronously into cloud");
+                scanSink.CodeLineDataPutAsync(e);
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Exception during delivery of scan [{0}]", ex);
+            }
 
-                log.InfoFormat("End processing Scan", e);
-            });
+            log.Debug("End processing Scan");
+
         }
 
-        private void HandleScanSinkEvent(object sender, ScanStoreEvent e)
+        private void HandleScanStoreEvent(object sender, ScanStoreEvent e)
         {
-            log.InfoFormat("Begin handling Scan delivery result [{0}]", e);
+            log.Info("Handle result of delivery of scan");
+            log.DebugFormat("Begin handling Scan delivery result [{0}]", e);
             if (e.IsException)
             {
                 log.InfoFormat("Create Windows Event Log Entry of [{0}]", e);
                 EventLog.WriteEntry(this.ServiceName, e.Exception.Message,
                                        System.Diagnostics.EventLogEntryType.Warning, 101);
-                return;
-            }
-            if (subscriber != null)
-            {
 
-                try
+            }
+            else
+            {
+                if (subscriber != null)
                 {
-                    log.InfoFormat("Scan delivery result trigger callback [{0}]", e);
-                    subscriber.OnScanDeliveredEvent();
-                    log.Info("Scan delivery result trigger callback completed");
-                }
-                catch (Exception ex)
-                {
-                    log.ErrorFormat("Failed to complete delivery notification [{0}]", e);
-                    log.ErrorFormat("Exception during delivery notification [{0}]", ex);
+
+                    try
+                    {
+                        log.InfoFormat("Notify subscribers asynchronously of scan delivery result [{0}]");
+                        subscriber.NotifySubscriberAsync(e);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Failed to complete delivery notification [{0}]", e);
+                        log.ErrorFormat("Exception during delivery notification [{0}]", ex);
+                    }
                 }
             }
-            log.Info("End handling Scan delivery result ");
+            log.Debug("End handling Scan delivery result ");
         }
 
         protected override void OnStop()
@@ -193,6 +194,16 @@ namespace CH.Alika.POS.Service
                 }
             }
 
+        }
+
+        internal void StartFromConsole(string[] args)
+        {
+            OnStart(args);
+        }
+
+        internal void StopFromConsole()
+        {
+            OnStop();
         }
     }
 }
