@@ -8,11 +8,11 @@ namespace CH.Alika.POS.Hardware
     public class ScanStoreEvent : EventArgs
     {
         private Exception _exception;
-        private String response;
+        public String DeliveryResponse { get; private set; }
 
-        public ScanStoreEvent(String response)
+        public ScanStoreEvent(String deliveryResponse)
         {
-            this.response = response;
+            DeliveryResponse = deliveryResponse;
         }
 
         public Boolean IsException
@@ -30,7 +30,7 @@ namespace CH.Alika.POS.Hardware
 
         public override string ToString()
         {
-            return String.Format("ScanStoreEvent [{0}]", IsException ? _exception.Message : "scan delivered (" + response + ")");
+            return String.Format("ScanStoreEvent [{0}]", IsException ? _exception.Message : "scan delivered (" + DeliveryResponse + ")");
         }
     }
 }

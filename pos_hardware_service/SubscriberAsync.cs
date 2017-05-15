@@ -27,7 +27,7 @@ namespace CH.Alika.POS.Service
                 {
                     log.Info("Notify remote subscriber of scan");
                     log.DebugFormat("Begin call remote notification of scan [{0}]", e);
-                    try { _subscriber.OnScanEvent(); }
+                    try { _subscriber.HandlerScan((int)(e.CodeLineData.CodelineValidationResult),e.CodeLineData.Surname); }
                     catch (Exception ex)
                     {
                         log.WarnFormat("Unable to notify remote subscriber of scan  [{0}]", ex.Message);
@@ -45,7 +45,7 @@ namespace CH.Alika.POS.Service
                 {
                     log.Info("Notify remote subscriber of scan delivery result");
                     log.DebugFormat("Begin call remote notification of scan delivery result [{0}]", e);
-                    try { _subscriber.OnScanDeliveredEvent(); }
+                    try { _subscriber.HandleScanDelivered(!e.IsException,e.DeliveryResponse); }
                     catch (Exception ex)
                     {
                         log.WarnFormat("Unable to notify remote subscriber of scan delivery result [{0}]", ex.Message);

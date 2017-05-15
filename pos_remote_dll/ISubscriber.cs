@@ -9,9 +9,9 @@ namespace CH.Alika.POS.Remote
     public interface ISubscriber
     {
         [OperationContract(IsOneWay = true)]
-        void OnScanEvent();
+        void HandlerScan(int validationResult, string contents);
 
         [OperationContract(IsOneWay = true)]
-        void OnScanDeliveredEvent();
+        void HandleScanDelivered(bool wasDelivered, string deliveryResponse);
     }
 }

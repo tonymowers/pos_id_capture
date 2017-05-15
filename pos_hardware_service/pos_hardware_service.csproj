@@ -41,6 +41,9 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net40-client\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MMMReaderDotNet40">
+      <HintPath>..\3M_SDK\1.2.1.2\Bin\MMMReaderDotNet40.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />

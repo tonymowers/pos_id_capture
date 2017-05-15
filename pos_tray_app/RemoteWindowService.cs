@@ -51,13 +51,13 @@ namespace CH.Alika.POS.TrayApp
                 _parent = parent;
             }
 
-            public void OnScanEvent()
+            public void HandlerScan(int validationResult, string contents)
             {
                 if (_parent.OnScanEvent != null)
                     _parent.OnScanEvent(_parent, new EventArgs());
             }
 
-            public void OnScanDeliveredEvent()
+            public void HandleScanDelivered(bool wasDelivered, string deliveryResponse)
             {
                 if (_parent.OnScanDeliveredEvent != null)
                     _parent.OnScanDeliveredEvent(_parent, new EventArgs());
