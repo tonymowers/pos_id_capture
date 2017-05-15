@@ -26,20 +26,24 @@ namespace CH.Alika.POS.Hardware
             Task<ScanStoreEvent> task = Task.Factory.StartNew<ScanStoreEvent>(() =>
             {
                 ScanStoreEvent scanStoreEvent;
-                try
+                using (LogProvider.OpenNestedContext("Task_CodeLineDataPut"))
                 {
-                    ScanStoreRestImpl service = new ScanStoreRestImpl(_configFileName);
-                    log.Debug("Call CodeLineDataPut web service");
-                    String response = service.CodeLineDataPut(e.CodeLineData);
-                    log.Debug("Return CodeLineDataPut web service");
-                    scanStoreEvent = new ScanStoreEvent(response);
+                    log.Info("Putting scan in cloud");
+                    try
+                    {
+                        ScanStoreRestImpl service = new ScanStoreRestImpl(_configFileName);
+                        log.Debug("Begin call CodeLineDataPut web service");
+                        String response = service.CodeLineDataPut(e.CodeLineData);
+                        log.Debug("End call CodeLineDataPut web service");
+                        scanStoreEvent = new ScanStoreEvent(response);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.WarnFormat("Exception while putting scan into cloud [{0}]", ex);
+                        scanStoreEvent = new ScanStoreEvent(ex);
+                    }
+                    NotifyListeners(scanStoreEvent);
                 }
-                catch (Exception ex)
-                {
-                    log.DebugFormat("Exception while putting scan into cloud [{0}]", e);
-                    scanStoreEvent = new ScanStoreEvent(ex);
-                }
-                NotifyListeners(scanStoreEvent);
                 return scanStoreEvent;
             });
             return task;
@@ -53,15 +57,13 @@ namespace CH.Alika.POS.Hardware
             }
             else
             {
-                log.Info("Nofitying listeners of success putting scan in cloud");
+                log.Info("Notifying listeners of success putting scan in cloud");
             }
             log.DebugFormat("Begin notify listeners of ScanStoreEvent [{0}]", scanStoreEvent);
-            try
-            {
-                OnScanStoreEvent(this, scanStoreEvent);
-            }
+            try { OnScanStoreEvent(this, scanStoreEvent); }
             catch { }
-            log.DebugFormat("End notify listeners of ScanStoreEvent [{0}]", scanStoreEvent);
+            log.Debug("End notify listeners of ScanStoreEvent");
+
         }
 
         public void Dispose()

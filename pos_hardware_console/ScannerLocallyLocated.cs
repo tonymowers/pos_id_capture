@@ -22,6 +22,7 @@ namespace CH.Alika.POS.ConsoleApp
             try
             {
                 documentSink.OnScanStoreEvent += HandleScanSinkEvent;
+                scanner.OnScanSourceEvent += HandleScanSourceEvent;
                 scanner.OnCodeLineScanEvent += delegate(object sender, CodeLineScanEvent e) { documentSink.CodeLineDataPutAsync(e); };
                 scanner.Activate();
             }
@@ -49,6 +50,12 @@ namespace CH.Alika.POS.ConsoleApp
         public override String ToString()
         {
             return String.Format("ScannerLocallyLocated [{0}]", scanner == null ? "" : scanner.ToString());
+        }
+
+        static void HandleScanSourceEvent(object sender, ScanSourceEvent e)
+        {
+            if (log.IsDebugEnabled())
+                Console.WriteLine(e);
         }
 
         static void HandleScanSinkEvent(object sender, ScanStoreEvent e)

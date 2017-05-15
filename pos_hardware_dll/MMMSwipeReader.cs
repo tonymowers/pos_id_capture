@@ -15,6 +15,14 @@ namespace CH.Alika.POS.Hardware
 
         private MMM.Readers.Modules.Swipe.SwipeSettings swipeSettings;
         public event EventHandler<CodeLineScanEvent> OnCodeLineScanEvent;
+        public event EventHandler<ScanSourceEvent> OnScanSourceEvent;
+
+        public MMMSwipeReader()
+        {
+            OnCodeLineScanEvent += delegate(Object sender, CodeLineScanEvent e) { };
+            OnScanSourceEvent += delegate(Object sender, ScanSourceEvent e) { };
+        }
+
         public void Activate()
         {
             log.Debug("Begin Swipe Reader Activation");
@@ -30,7 +38,7 @@ namespace CH.Alika.POS.Hardware
             InitializeSwipeReader(
                 swipeSettings,
                 new MMM.Readers.Modules.Swipe.DataDelegate(DeviceDataHandler),
-                new MMM.Readers.FullPage.EventDelegate(DeviceEventHanlder));
+                new MMM.Readers.FullPage.EventDelegate(DeviceEventHandler));
 
             log.Debug("End Swipe Reader Activation");
             log.Info("Swipe Reader Acquired");
@@ -132,44 +140,47 @@ namespace CH.Alika.POS.Hardware
 
         }
 
-        private void DeviceErrorHandler(MMM.Readers.ErrorCode errorCode, string errorMessage)
-        {
-            log.DebugFormat("Swipe Reader Error: errorcode [{0}], error message [{1}]", errorCode, errorMessage);
-            Console.WriteLine("***READER ERROR: " + errorCode);
-        }
 
         private void DeviceDataHandler(MMM.Readers.Modules.Swipe.SwipeItem swipeItem, object swipeData)
         {
-            log.DebugFormat("Device data: swipe item [{0}], swipe data [{1}]", swipeItem, swipeData); 
+            log.DebugFormat("Device data: swipe item [{0}], swipe data [{1}]", swipeItem, swipeData);
+            NotifyListeners(new ScanSourceEvent(swipeItem, swipeData));
+
             if (swipeItem == MMM.Readers.Modules.Swipe.SwipeItem.OCR_CODELINE)
             {
+                
                 MMM.Readers.CodelineData codeLineData = (MMM.Readers.CodelineData)swipeData;
-                if (codeLineData.CheckDigitDataListCount > 0
-                    && (codeLineData.CodelineValidationResult == MMM.Readers.CheckDigitResult.CDR_Valid
-                    || codeLineData.CodelineValidationResult == MMM.Readers.CheckDigitResult.CDR_Warning)
-                    )
-                {
+                using (LogProvider.OpenNestedContext(codeLineData.Surname)) {
+                    log.InfoFormat("CodeLineData ValidationResult [{0}]", codeLineData.CodelineValidationResult);
                     NotifyListeners(codeLineData);
-                }
-                else
-                {
-                    log.DebugFormat("CodeLineData Ignored [{0}]", codeLineData);
                 }
             }
         }
 
         private void NotifyListeners(MMM.Readers.CodelineData codeLineData)
         {
-            log.Info("Notifying listeners of successful document scan");
+            log.Info("Notifying listeners of document scan");
             log.DebugFormat("Begin notification of CodeLineScanEvent listeners [{0}]", codeLineData);
             try { OnCodeLineScanEvent(this, new CodeLineScanEvent(codeLineData)); }
             catch { };
             log.DebugFormat("End notification of CodeLineScanEvent listeners [{0}]", codeLineData);
         }
 
-        private void DeviceEventHanlder(MMM.Readers.FullPage.EventCode eventCode)
+        private void NotifyListeners(ScanSourceEvent e) {
+            log.DebugFormat("Begin notifying ScanSourceEvent listeners [{0}]", e);
+            try { OnScanSourceEvent(this, e); }
+            catch { };
+            log.DebugFormat("End notifying ScanSourceEvent listeners");
+        }
+
+        private void DeviceErrorHandler(MMM.Readers.ErrorCode errorCode, string errorMessage)
         {
-            log.DebugFormat("Device Event [{0}]", eventCode);
+            NotifyListeners(new ScanSourceEvent(errorCode,errorMessage));
+        }
+
+        private void DeviceEventHandler(MMM.Readers.FullPage.EventCode eventCode)
+        {
+            NotifyListeners(new ScanSourceEvent(eventCode));
         }
 
         public void Dispose()

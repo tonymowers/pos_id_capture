@@ -10,9 +10,9 @@ using CH.Alika.POS.ConsoleApp.Logging;
 [assembly: log4net.Config.XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace CH.Alika.POS.ConsoleApp
 {
-  
 
-    
+
+
 
     class Program
     {
@@ -20,28 +20,31 @@ namespace CH.Alika.POS.ConsoleApp
 
         static void Main(string[] args)
         {
-            log.Info("Starting AlikaPosConsole Application");
-
-            Console.WriteLine("Press enter key to exit");
-            Console.WriteLine();
-
-            using (IScanner scanner = CreateScanner(args.Length == 0))
+            using (LogProvider.OpenNestedContext("AlikaPosConsole_MAIN"))
             {
-                try
-                {
-                    log.InfoFormat("Activate hardware event subscriber [{0}]", scanner);
-                    scanner.Activate();
-                    Console.WriteLine(scanner);
-                    Console.WriteLine("Scan documents now");
-                    Console.ReadLine();
-                }
-                catch (Exception e)
-                {
-                    log.FatalFormat("Failure to activate subscriber [{0}] exception [{1}]", scanner, e);
-                }
-            }
+                log.Info("Starting AlikaPosConsole Application");
 
-            log.Info("Terminating AlikaPosConsole Application");
+                Console.WriteLine("Press enter key to exit");
+                Console.WriteLine();
+
+                using (IScanner scanner = CreateScanner(args.Length == 0))
+                {
+                    try
+                    {
+                        log.InfoFormat("Activate hardware event subscriber [{0}]", scanner);
+                        scanner.Activate();
+                        Console.WriteLine(scanner);
+                        Console.WriteLine("Scan documents now");
+                        Console.ReadLine();
+                    }
+                    catch (Exception e)
+                    {
+                        log.FatalFormat("Failure to activate subscriber [{0}] exception [{1}]", scanner, e);
+                    }
+                }
+
+                log.Info("Terminating AlikaPosConsole Application");
+            }
         }
 
         static IScanner CreateScanner(bool useRemotelyLocatedScanner)

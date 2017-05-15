@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="App_Packages\LibLog.4.2\LibLog.cs" />
     <Compile Include="ConfigNotFoundException.cs" />
+    <Compile Include="ScanSourceEvent.cs" />
     <Compile Include="IScanStore.cs" />
     <Compile Include="IScanSource.cs" />
     <Compile Include="MMMSwipeReader.cs" />
