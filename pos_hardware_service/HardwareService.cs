@@ -45,40 +45,36 @@ namespace CH.Alika.POS.Service
         private static readonly ILog log = LogProvider.For<HardwareService>();
         private static readonly String _configFileName = AppDomain.CurrentDomain.BaseDirectory + "AlikaPosConfig.txt";
         private MMMSwipeReader scanner = null;
-        private IScanStore scanSink = null;
+        private IScanStore scanStoreCloud = null;
         private ServiceHost serviceHost = null;
-        private SubscriberAsync subscriber = null;
+        private SubscriberGroup subscribers = null;
 
         public HardwareService()
         {
             InitializeComponent();
-        }
-        public void Subscribe()
-        {
-            log.Info("Remote client subscribed");
-            subscriber = GetSubscriberAsync(); ;
-            subscriber.Closed += new EventHandler(Subscriber_Closed);
-            EventLog.WriteEntry(this.ServiceName, "subscribe called");
-        }
-
-        private void Subscriber_Closed(object sender, EventArgs e)
-        {
-            log.Info("Subscriber closed");
-            if (sender.Equals(subscriber)) {
-                log.Debug("Removed subscriber from list of subscribers");
-                subscriber = null;
-            }
         }
 
         private SubscriberAsync GetSubscriberAsync()
         {
             return new SubscriberAsync(OperationContext.Current.GetCallbackChannel<ISubscriber>());
         }
+
+        public void Subscribe()
+        {
+            using (LogProvider.OpenNestedContext("Subscriber_Subscribe"))
+            {
+                log.Info("Remote client subscribed");
+                subscribers.Add(GetSubscriberAsync()); 
+            }
+        }
+
         public void Unsubscribe()
         {
-            log.Info("Remote client unsubscribed");
-            Subscriber_Closed(GetSubscriberAsync(),EventArgs.Empty);
-            EventLog.WriteEntry(this.ServiceName, "unsubscribe called");
+            using (LogProvider.OpenNestedContext("Subscriber_Unsubscribe"))
+            {
+                log.Info("Remote client unsubscribed");
+                subscribers.Remove(GetSubscriberAsync());
+            }
         }
 
         protected override void OnStart(string[] args)
@@ -87,10 +83,11 @@ namespace CH.Alika.POS.Service
             log.Info("Service starting");
             try
             {
+                subscribers = new SubscriberGroup();
                 scanner = new MMMSwipeReader();
-                scanSink = new ScanStoreCloud(_configFileName);
+                scanStoreCloud = new ScanStoreCloud(_configFileName);
                 serviceHost = RemoteFactory.CreateServiceHost(this);
-                BindSourceToSink(scanner, scanSink);
+                BindScanSourceToScanStore(scanner, scanStoreCloud);
 
                 serviceHost.Open();
                 scanner.Activate();
@@ -108,7 +105,7 @@ namespace CH.Alika.POS.Service
             }
         }
 
-        private void BindSourceToSink(IScanSource scanSource, IScanStore scanSink)
+        private void BindScanSourceToScanStore(IScanSource scanSource, IScanStore scanSink)
         {
             scanSink.OnScanStoreEvent += HandleScanStoreEvent;
             scanner.OnCodeLineScanEvent += HandleCodeLineScan;
@@ -118,24 +115,12 @@ namespace CH.Alika.POS.Service
         {
             log.Info("Handling CodeLineScan");
             log.DebugFormat("Begin processing Scan", e);
+            subscribers.NotifyAll(e);
 
-            if (subscriber != null)
-            {
-                try
-                {
-                    log.Info("Notifying subscriber asynchronously of scanned document");
-                    subscriber.NotifySubscriberAsync(e);
-                }
-                catch (Exception ex)
-                {
-                    log.ErrorFormat("Failed to deliver Scan Event to subscriber [{0}]", e);
-                    log.ErrorFormat("Exception during handling of Scan Event notification [{0}]", ex);
-                }
-            }
             try
             {
                 log.Info("Putting scanned document asynchronously into cloud");
-                scanSink.CodeLineDataPutAsync(e);
+                scanStoreCloud.CodeLineDataPutAsync(e);
             }
             catch (Exception ex)
             {
@@ -158,20 +143,7 @@ namespace CH.Alika.POS.Service
             }
             else
             {
-                if (subscriber != null)
-                {
-
-                    try
-                    {
-                        log.InfoFormat("Notify subscribers asynchronously of scan delivery result [{0}]");
-                        subscriber.NotifySubscriberAsync(e);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.ErrorFormat("Failed to complete delivery notification [{0}]", e);
-                        log.ErrorFormat("Exception during delivery notification [{0}]", ex);
-                    }
-                }
+                subscribers.NotifyAll(e);
             }
             log.Debug("End handling Scan delivery result ");
         }
@@ -187,8 +159,10 @@ namespace CH.Alika.POS.Service
 
             cleanup(scanner);
             scanner = null;
-            cleanup(scanSink);
-            scanSink = null;
+            cleanup(scanStoreCloud);
+            scanStoreCloud = null;
+            cleanup(subscribers);
+            subscribers = null;
             log.Info("Service stopped");
         }
 
