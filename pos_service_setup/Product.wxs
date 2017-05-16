@@ -75,6 +75,16 @@
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
         <RemoveFile Id="ALLFILES_Console" Name="*.*" On="both" />
       </Component>
+
+      <Component Id="Tray_CMP">
+        <!-- Console tool for debugging hardware connectivity-->
+        <File Id="$(var.pos_tray_app.TargetFileName)" Source="$(var.pos_tray_app.TargetPath)" KeyPath="yes" />
+      </Component>
+
+      <Component Id="TrayAppLogConfig_CMP">
+        <File Id="AlikaPosTrayApp.exe.log4net" Source="$(var.pos_tray_app.TargetDir)\AlikaPosTrayApp.exe.log4net" KeyPath="yes"/>
+        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
+      </Component>
       
       <Component Id="log4net_CMP">
         <File Id="log4net.dll" Source="$(var.pos_hardware_console.TargetDir)\log4net.dll" KeyPath="yes"/>

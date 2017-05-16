@@ -74,6 +74,7 @@ namespace CH.Alika.POS.TrayApp
                 System.Media.SystemSounds.Asterisk.Play();
                 notifyIcon.BalloonTipText = "A scanned document was successfully delivered to cloud service";
                 notifyIcon.BalloonTipTitle = "Document Scan Delivered";
+                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon.ShowBalloonTip(3);
             }, null);
         }
