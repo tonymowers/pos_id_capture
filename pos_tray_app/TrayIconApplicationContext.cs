@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Threading;
+using CH.Alika.POS.TrayApp.Logging;
 
 namespace CH.Alika.POS.TrayApp
 {
@@ -14,7 +15,7 @@ namespace CH.Alika.POS.TrayApp
         private static readonly string _DefaultTooltip = "Alika Point-Of-Sale";
         private System.ComponentModel.Container components;
         private NotifyIcon notifyIcon;
-        private RemoteWindowService remoteService;
+        private SubscriptionProxy subscriptionProxy;
         private SynchronizationContext _uiThreadContext;
 
         public TrayIconApplicationContext()
@@ -37,27 +38,33 @@ namespace CH.Alika.POS.TrayApp
             notifyIcon.ContextMenuStrip.Opening += ContextMenuStrip_Opening;
             notifyIcon.Click += NotifyIcon_Click;
             // notifyIcon.DoubleClick += notifyIcon_DoubleClick;
-            remoteService = new RemoteWindowService();
-            remoteService.OnScanEvent += HandleScanEvent;
-            remoteService.OnScanDeliveredEvent += HandleScanDeliveredEvent;
-            remoteService.Activate();
+            subscriptionProxy = new SubscriptionProxy();
+            subscriptionProxy.OnScanEvent += HandleScanEvent;
+            subscriptionProxy.OnScanDeliveredEvent += HandleScanDeliveredEvent;
+            subscriptionProxy.Activate();
         }
 
         private void ContextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = false;
             notifyIcon.ContextMenuStrip.Items.Clear();
-            notifyIcon.ContextMenuStrip.Items.Add("Menu 1",null,null);
+            notifyIcon.ContextMenuStrip.Items.Add("Menu 1", null, null);
             notifyIcon.ContextMenuStrip.Items.Add("Menu 2", null, null);
             notifyIcon.ContextMenuStrip.Items.Add("Very Long Menu 3", null, null);
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
-            
+            _uiThreadContext.Post((SendOrPostCallback)delegate
+            {
+                notifyIcon.BalloonTipText = "Will do some action";
+                notifyIcon.BalloonTipTitle = "Icon Clicked";
+                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                notifyIcon.ShowBalloonTip(3);
+            }, null);
         }
 
-        private void HandleScanEvent(object source, EventArgs e)
+        private void HandleScanEvent(object source, ScanEvent e)
         {
             _uiThreadContext.Post((SendOrPostCallback)delegate
             {
@@ -67,14 +74,23 @@ namespace CH.Alika.POS.TrayApp
             }, null);
         }
 
-        private void HandleScanDeliveredEvent(object source, EventArgs e)
+        private void HandleScanDeliveredEvent(object source, ScanDeliveryEvent e)
         {
             _uiThreadContext.Post((SendOrPostCallback)delegate
             {
                 System.Media.SystemSounds.Asterisk.Play();
-                notifyIcon.BalloonTipText = "A scanned document was successfully delivered to cloud service";
-                notifyIcon.BalloonTipTitle = "Document Scan Delivered";
-                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                if (e.ScanDeliveryResult.WasDelivered)
+                {
+                    notifyIcon.BalloonTipText = "A scanned document was successfully delivered to cloud service";
+                    notifyIcon.BalloonTipTitle = "Document Scan Delivered";
+                    notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                }
+                else
+                {
+                    notifyIcon.BalloonTipText = "Error: " + e.ScanDeliveryResult.DeliveryResponse;
+                    notifyIcon.BalloonTipTitle = "Document Scan Delivery Failed";
+                    notifyIcon.BalloonTipIcon = ToolTipIcon.Error;
+                }
                 notifyIcon.ShowBalloonTip(3);
             }, null);
         }

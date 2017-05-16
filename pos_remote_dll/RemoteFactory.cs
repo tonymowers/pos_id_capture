@@ -15,7 +15,7 @@ namespace CH.Alika.POS.Remote
 
         public static DuplexChannelFactory<IScanner> CreateClientFactory(ISubscriber subscriber)
         {
-            log.InfoFormat("Create client channel for [{0}]",PipeLocation);
+            log.DebugFormat("Create client channel for [{0}]",PipeLocation);
             return new DuplexChannelFactory<IScanner>(
                     subscriber,
                     new NetNamedPipeBinding(NetNamedPipeSecurityMode.None),
@@ -24,7 +24,7 @@ namespace CH.Alika.POS.Remote
 
         public static ServiceHost CreateServiceHost(IScanner scanner)
         {
-            log.InfoFormat("Create service host at [{0}]", PipeLocation);
+            log.DebugFormat("Create service host at [{0}]", PipeLocation);
             ServiceHost selfHost = new ServiceHost(scanner);
             selfHost.AddServiceEndpoint(typeof(IScanner), new NetNamedPipeBinding(NetNamedPipeSecurityMode.None), PipeLocation);
             ServiceMetadataBehavior smb = new ServiceMetadataBehavior();

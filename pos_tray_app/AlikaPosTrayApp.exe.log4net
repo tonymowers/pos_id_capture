@@ -9,7 +9,7 @@
   </appender>
 
   <appender name="FileAppender" type="log4net.Appender.RollingFileAppender">
-    <file value="AlikaPosService_Log.txt" />
+    <file value="AlikaPosTrayApp_Log.txt" />
     <appendToFile value="true" />
     <rollingStyle value="Size" />
     <maxSizeRollBackups value="10" />C:\Users\tony\Documents\Projects\pos_hardware\pos_hardware_console\AlikaPosConsole.exe.log4net

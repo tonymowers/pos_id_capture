@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using CH.Alika.POS.TrayApp.Logging;
 [assembly: log4net.Config.XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 
 namespace CH.Alika.POS.TrayApp
@@ -15,13 +16,16 @@ namespace CH.Alika.POS.TrayApp
         [STAThread]
         static void Main()
         {
-            log.Info("Start AlikaPosTrayApp");
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            ApplicationContext applicationContext = new TrayIconApplicationContext();
-            // applicationContext.MainForm = new Form1();
-            Application.Run(applicationContext);
-            log.Info("Terminate AlikaPosTrayApp");
+            using (LogProvider.OpenNestedContext("Program_Main"))
+            {
+                log.Info("Start AlikaPosTrayApp");
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                ApplicationContext applicationContext = new TrayIconApplicationContext();
+                // applicationContext.MainForm = new Form1();
+                Application.Run(applicationContext);
+                log.Info("Terminate AlikaPosTrayApp");
+            }
         }
     }
 }

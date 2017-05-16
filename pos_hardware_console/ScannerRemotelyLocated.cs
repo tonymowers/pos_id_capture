@@ -24,16 +24,16 @@ namespace CH.Alika.POS.ConsoleApp
             client.Subscribe();
         }
 
-        public void HandlerScan(int validationResult, string contents)
+        public void HandlerScan(ScanResult r)
         {
-            log.InfoFormat("Scan event detected, validationResult [{0}] contents [{1}]",validationResult,contents);
-            Console.WriteLine(String.Format( "document scanned validationResult [{0}] contents [{1}]",validationResult,contents));
+            log.InfoFormat("Scan event detected, validationResult [{0}] contents [{1}]",r.ValidationResult,r.Contents);
+            Console.WriteLine(String.Format( "document scanned validationResult [{0}] contents [{1}]",r.ValidationResult,r.Contents));
         }
 
-        public void HandleScanDelivered(bool wasDelivered, string deliveryResponse)
+        public void HandleScanDelivered(ScanDeliveryResult r)
         {
-            log.InfoFormat("Document delivery result, wasDelivered [{0}] deliveryResponse [{1}]", wasDelivered, deliveryResponse);
-            Console.WriteLine(String.Format("document delivery result, wasDelivered [{0}] deliveryResponse [{1}]", wasDelivered, deliveryResponse));
+            log.InfoFormat("Document delivery result, wasDelivered [{0}] deliveryResponse [{1}]", r.WasDelivered, r.DeliveryResponse);
+            Console.WriteLine(String.Format("document delivery result, wasDelivered [{0}] deliveryResponse [{1}]", r.WasDelivered, r.DeliveryResponse));
             SystemSounds.Exclamation.Play();
         }
 

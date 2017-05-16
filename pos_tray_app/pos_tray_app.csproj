@@ -60,7 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RemoteWindowService.cs" />
+    <Compile Include="ScanDeliveryEvent.cs" />
+    <Compile Include="ScanEvent.cs" />
+    <Compile Include="SubscriptionProxy.cs" />
     <Compile Include="TrayIconApplicationContext.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

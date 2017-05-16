@@ -91,7 +91,7 @@ namespace CH.Alika.POS.Service
 
                 serviceHost.Open();
                 scanner.Activate();
-                log.Info("Service started");
+                log.InfoFormat("Service started and listening at ",RemoteFactory.PipeLocation);
             }
             catch (Exception e)
             {
@@ -141,10 +141,7 @@ namespace CH.Alika.POS.Service
                                        System.Diagnostics.EventLogEntryType.Warning, 101);
 
             }
-            else
-            {
-                subscribers.NotifyAll(e);
-            }
+            subscribers.NotifyAll(e);
             log.Debug("End handling Scan delivery result ");
         }
 
