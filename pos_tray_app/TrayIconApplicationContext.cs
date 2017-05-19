@@ -21,6 +21,8 @@ namespace CH.Alika.POS.TrayApp
         public TrayIconApplicationContext()
         {
             InitializeComponent();
+            MainForm = new MainForm();
+            MainForm.WindowState = FormWindowState.Minimized;
         }
 
         private void InitializeComponent()
@@ -32,6 +34,20 @@ namespace CH.Alika.POS.TrayApp
                 Icon = Properties.Resources.TrayIcon64x64,
                 Text = _DefaultTooltip,
                 Visible = true
+            };
+
+            notifyIcon.Disposed += (s, ev) =>
+            {
+                if (System.Windows.Forms.Application.MessageLoop)
+                {
+                    // WinForms app
+                    System.Windows.Forms.Application.Exit();
+                }
+                else
+                {
+                    // Console app
+                    System.Environment.Exit(1);
+                }
             };
 
             _uiThreadContext = new WindowsFormsSynchronizationContext();
@@ -48,20 +64,29 @@ namespace CH.Alika.POS.TrayApp
         {
             e.Cancel = false;
             notifyIcon.ContextMenuStrip.Items.Clear();
-            notifyIcon.ContextMenuStrip.Items.Add("Menu 1", null, null);
-            notifyIcon.ContextMenuStrip.Items.Add("Menu 2", null, null);
-            notifyIcon.ContextMenuStrip.Items.Add("Very Long Menu 3", null, null);
+            notifyIcon.ContextMenuStrip.Items.Add("Quit", null, NotifyIcon_Quit);
+        }
+
+        private void NotifyIcon_Quit(object sender, EventArgs e)
+        {
+            // http://stackoverflow.com/questions/9826197/handle-wm-close-message-send-to-c-sharp-tray-app
+            notifyIcon.Dispose();
+            
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
-            _uiThreadContext.Post((SendOrPostCallback)delegate
+            var mouseEvent = e as MouseEventArgs;
+            if ((mouseEvent != null) && (mouseEvent.Button == MouseButtons.Left))
             {
-                notifyIcon.BalloonTipText = "Will do some action";
-                notifyIcon.BalloonTipTitle = "Icon Clicked";
-                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
-                notifyIcon.ShowBalloonTip(3);
-            }, null);
+                _uiThreadContext.Post((SendOrPostCallback)delegate
+                {
+                    notifyIcon.BalloonTipText = "This application generates notifications about document scanning events";
+                    notifyIcon.BalloonTipTitle = "Alika Analytics Point-Of-Sale Application";
+                    notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    notifyIcon.ShowBalloonTip(3);
+                }, null);
+            }
         }
 
         private void HandleScanEvent(object source, ScanEvent e)
@@ -70,6 +95,7 @@ namespace CH.Alika.POS.TrayApp
             {
                 notifyIcon.BalloonTipText = "A document was successfully scanned.";
                 notifyIcon.BalloonTipTitle = "Document Scanned";
+                notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon.ShowBalloonTip(3);
             }, null);
         }

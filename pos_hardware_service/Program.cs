@@ -18,6 +18,7 @@ namespace CH.Alika.POS.Service
         {
             using (LogProvider.OpenNestedContext("AlikaPosService_Main"))
             {
+                log.Info("AlikaPosService Main Entered");
                 if (Environment.UserInteractive)
                 {
                     Console.WriteLine("Press ENTER key to quit");

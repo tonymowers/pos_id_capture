@@ -9,7 +9,8 @@
 <?define UpgradeCode = "{458daa77-6451-4ac2-add7-42c316cd5ab2}" ?>
 <!-- 3M sdk -->
 <?define SDK_3M = "..\3M_SDK\1.2.1.2" ?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product Id="{A640B013-FD6D-4FFB-A8F9-915C6C478C4D}" Name="$(var.Name)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
@@ -17,17 +18,37 @@
     <MediaTemplate EmbedCab="yes" />
 
     <Feature Id="ProductFeature" Title="AlikaPosService" Level="1">
+      <ComponentGroupRef Id="UNINSTALL_FOLDER"/>
       <ComponentGroupRef Id="COMPONENTS_ALIKA_POS" />
       <ComponentGroupRef Id="COMPONENTS_3M_READER" />
     </Feature>
   </Product>
 
   <Fragment>
+    <InstallExecuteSequence>
+      <Custom Action="CloseTrayApp"
+               Before="InstallInitialize">Installed</Custom>
+      <Custom Action="CloseConsoleApp"
+               Before="InstallInitialize">Installed</Custom>
+    </InstallExecuteSequence>
+
+    <util:CloseApplication Id="CloseTrayApp" Target="$(var.pos_tray_app.TargetFileName)"
+                            CloseMessage="yes" RebootPrompt="no">
+      Installed
+    </util:CloseApplication>
+    <util:CloseApplication Id="CloseConsoleApp" Target="$(var.pos_hardware_console.TargetFileName)"
+                            CloseMessage="yes" RebootPrompt="no">
+      Installed
+    </util:CloseApplication>
+  </Fragment>
+  <Fragment>
+    
     <!--Directory structure definition for target installation -->
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
           <Directory Id="INSTALLFOLDER" Name="$(var.Name)" >
+            
             <Directory Id="DIR_BIN" Name="bin"/>
           </Directory>
         </Directory>
@@ -38,9 +59,25 @@
   <Fragment>
     <!--Component group definitions -->
     <!-- -->
+
+    <Property Id="INSTALLFOLDER_PATH">
+      <RegistrySearch Key="SOFTWARE\$(var.Manufacturer)\$(var.Name)" Root="HKLM" Type="raw" Id="APPLICATIONFOLDER_REGSEARCH" Name="Path" />
+    </Property>
+    
+    <ComponentGroup Id="UNINSTALL_FOLDER" Directory="ROOTDIRECTORY">
+      <Component Id="UninstallFolder" Guid="*">
+        <util:RemoveFolderEx Property="INSTALLFOLDER_PATH" On="uninstall"/>
+        <RemoveFolder Id="UNINSTALL_ROOTDIRECTORY" On="uninstall"/>
+        <RegistryValue Root="HKLM" Key="SOFTWARE\$(var.Manufacturer)\$(var.Name)" Name="Path"
+                Type="string" Value="[INSTALLFOLDER]" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
     <ComponentGroup Id="COMPONENTS_ALIKA_POS" Directory="DIR_BIN">
+
       <!-- Components built by Alika Analytics AG for point-of-sale system -->
       <Component Id="Service_CMP">
+
+        
         <!-- Alika point-of-sale windows service for interacting with point of sale hardware -->
         <File Id="$(var.pos_hardware_service.TargetFileName)" Source="$(var.pos_hardware_service.TargetPath)" KeyPath="yes" />
         <ServiceInstall Id="ServiceInstaller"
@@ -66,14 +103,12 @@
       
       <Component Id="ServiceLogConfig_CMP">
         <File Id="AlikaPosService.exe.log4net" Source="$(var.pos_hardware_service.TargetDir)\AlikaPosService.exe.log4net" KeyPath="yes"/>
-        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
       </Component>
       
       <Component Id="Console_CMP">
         <!-- Console tool for debugging hardware connectivity-->
         <File Id="$(var.pos_hardware_console.TargetFileName)" Source="$(var.pos_hardware_console.TargetPath)" KeyPath="yes" />
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
-        <RemoveFile Id="ALLFILES_Console" Name="*.*" On="both" />
       </Component>
 
       <Component Id="Tray_CMP">
@@ -107,7 +142,6 @@
       
       <Component Id="Newtonsof.Json_CMP">
         <File Id="Newtonsoft.Json.dll" Source="$(var.pos_hardware_dll.TargetDir)\Newtonsoft.Json.dll" KeyPath="yes"/>
-        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
       </Component>
 
       
@@ -115,8 +149,6 @@
       <Component Id="AlikaPosRemote_CMP">
         <!-- Console tool for debugging hardware connectivity-->
         <File Id="$(var.pos_remote_dll.TargetFileName)" Source="$(var.pos_remote_dll.TargetPath)" KeyPath="yes" />
-        <!-- Remove all files from the INSTALLFOLDER on uninstall -->
-        <RemoveFile Id="ALLFILES_Remote" Name="*.*" On="both" />
       </Component>
     </ComponentGroup>
 
