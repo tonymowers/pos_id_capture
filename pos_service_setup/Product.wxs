@@ -22,25 +22,22 @@
       <ComponentGroupRef Id="COMPONENTS_ALIKA_POS" />
       <ComponentGroupRef Id="COMPONENTS_3M_READER" />
     </Feature>
-  </Product>
+    <Binary Id="CloseAppsDLL"
+        SourceFile="$(var.pos_wixca_dll.TargetDir)AlikaPosWixCA.CA.dll" />
 
-  <Fragment>
+    <Property Id="ProcessNames" Value="AlikaPosTrayApp, AlikaConsoleApp" />
     <InstallExecuteSequence>
-      <Custom Action="CloseTrayApp"
-               Before="InstallInitialize">Installed</Custom>
-      <Custom Action="CloseConsoleApp"
-               Before="InstallInitialize">Installed</Custom>
+      <Custom Action="CloseApps"  
+              Before="InstallInitialize"></Custom>
     </InstallExecuteSequence>
 
-    <util:CloseApplication Id="CloseTrayApp" Target="$(var.pos_tray_app.TargetFileName)"
-                            CloseMessage="yes" RebootPrompt="no">
-      Installed
-    </util:CloseApplication>
-    <util:CloseApplication Id="CloseConsoleApp" Target="$(var.pos_hardware_console.TargetFileName)"
-                            CloseMessage="yes" RebootPrompt="no">
-      Installed
-    </util:CloseApplication>
-  </Fragment>
+    <CustomAction Id="CloseApps"
+              BinaryKey="CloseAppsDLL"
+              DllEntry="CloseApps"
+                  Execute="firstSequence" Return="check" />
+
+  </Product>
+
   <Fragment>
     
     <!--Directory structure definition for target installation -->

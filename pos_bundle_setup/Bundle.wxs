@@ -26,9 +26,8 @@
           InstallCondition="(1 = 1)"/>
       <RollbackBoundary />
       
-      <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_setup.TargetPath)" />
-      
-		</Chain>
+      <MsiPackage Id="AlikaPosService" SourceFile="$(var.pos_service_setup.TargetPath)" DisplayInternalUI="no" />
+    </Chain>
 	</Bundle>
 
   <Fragment>
