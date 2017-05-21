@@ -30,7 +30,6 @@ function mrzGenerate(data) {
         return (val + repeat("<",len)).slice(0,len);
     }
     function checkDigit(str) {
-        console.log(str);
         var weights = [7,3,1];
         var r = 0;
         var i;
@@ -46,7 +45,6 @@ function mrzGenerate(data) {
             r += n * weights[i % 3]
         }
         r %= 10;
-        console.log(r);
         return r;
     }
     function encode(str) {
