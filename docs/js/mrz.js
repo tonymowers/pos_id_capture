@@ -26,7 +26,7 @@ function mrzGenerate(data) {
         return (new Array(times + 1)).join(str);
     }
     function pad(str,len) {
-        var val = str || "";
+        var val = (str || "").toUpperCase();
         return (val + repeat("<",len)).slice(0,len);
     }
     function checkDigit(str) {
@@ -35,14 +35,19 @@ function mrzGenerate(data) {
         var i;
         for (i = 0; i < str.length; ++i) {
             var n = str.charCodeAt(i);
-            if ( (n >= 48) && (n <= 57)) {
-                n -= 48;
-            } else if (n == 60) {
+            if ( (n >= '0'.charCodeAt(0)) && (n <= '9'.charCodeAt(0))) {
+                // numbers
+                n = n -  '0'.charCodeAt(0);
+            } else if (n == '<'.charCodeAt(0)) {
+                // < filler
                 n = 0;
             } else {
-                n -= 'A'.charCodeAt(0);
+                // letters
+                n = n - 'A'.charCodeAt(0) + 10;
             }
-            r += n * weights[i % 3]
+            w = weights[i % 3];
+            r += n * w
+
         }
         r %= 10;
         return r;
@@ -55,7 +60,7 @@ function mrzGenerate(data) {
     line1 += pad(data.docSubtype,1);
     line1 += pad(data.issuingCountry,3);
     line1 += pad(
-        data.lastName
+        (data.lastName || "")
         + "<<" + (data.firstName || "")
         +  "<" + (data.middleName || ""),39);
     var docNo = pad(data.docNo,9);
