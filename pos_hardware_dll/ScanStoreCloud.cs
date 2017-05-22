@@ -31,9 +31,9 @@ namespace CH.Alika.POS.Hardware
                     log.Info("Putting scan in cloud");
                     try
                     {
-                        ScanStoreRestImpl service = new ScanStoreRestImpl(_configFileName);
+                        ScanStoreRestImpl service = new ScanStoreRestImpl(_configFileName,e);
                         log.Debug("Begin call CodeLineDataPut web service");
-                        String response = service.CodeLineDataPut(e.CodeLineData);
+                        String response = service.CodeLineDataPut(e);
                         log.Debug("End call CodeLineDataPut web service");
                         scanStoreEvent = new ScanStoreEvent(response);
                     }

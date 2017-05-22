@@ -23,7 +23,7 @@ namespace CH.Alika.POS.ConsoleApp
             {
                 documentSink.OnScanStoreEvent += HandleScanSinkEvent;
                 scanner.OnScanSourceEvent += HandleScanSourceEvent;
-                scanner.OnCodeLineScanEvent += delegate(object sender, CodeLineScanEvent e) { documentSink.CodeLineDataPutAsync(e); };
+                scanner.OnCodeLineScanEvent += HandleCodeLineScanEvent;
                 scanner.Activate();
             }
             catch (PosHardwareException e)
@@ -52,6 +52,11 @@ namespace CH.Alika.POS.ConsoleApp
             return String.Format("ScannerLocallyLocated [{0}]", scanner == null ? "" : scanner.ToString());
         }
 
+        private void HandleCodeLineScanEvent(object sender, CodeLineScanEvent e)
+        {
+            documentSink.CodeLineDataPutAsync(e);
+        }
+
         static void HandleScanSourceEvent(object sender, ScanSourceEvent e)
         {
             if (log.IsDebugEnabled())
@@ -61,6 +66,7 @@ namespace CH.Alika.POS.ConsoleApp
         static void HandleScanSinkEvent(object sender, ScanStoreEvent e)
         {
             Console.WriteLine(e);
+            
         }
     }
 }

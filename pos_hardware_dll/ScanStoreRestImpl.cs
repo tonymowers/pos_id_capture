@@ -10,17 +10,33 @@ namespace CH.Alika.POS.Hardware
     public class ScanStoreRestImpl
     {
         private ScanStoreConfig Settings;
-        public ScanStoreRestImpl(String configFileName)
+        public ScanStoreRestImpl(String configFileName, CodeLineScanEvent e)
         {
             try
             {
-                String dir = AppDomain.CurrentDomain.BaseDirectory;
+                CreateScanStoreConfigFileIfNecessary(configFileName, e);
                 string text = System.IO.File.ReadAllText(configFileName);
                 Settings = Newtonsoft.Json.JsonConvert.DeserializeObject<ScanStoreConfig>(text);
             }
-            catch (FileNotFoundException e)
+            catch (FileNotFoundException ex)
             {
-                throw new ConfigNotFoundException(e);
+                throw new ConfigNotFoundException(ex);
+            }
+        }
+
+        private void CreateScanStoreConfigFileIfNecessary(String configFileName, CodeLineScanEvent e) 
+        {
+            if (!System.IO.File.Exists(configFileName) && Utils.IsConfigurationEvent(e))
+            {
+                var configData = Utils.ConfigurationData(e);
+                var longUrl = configData.RetrieveLongUrl();
+                ScanStoreConfig settings = new ScanStoreConfig()
+                {
+                    ClientId = configData.ClientId,
+                    AccessKey = configData.AccessKey,
+                    BaseUrl = longUrl
+                };
+                settings.Write(configFileName);
             }
         }
 
@@ -40,8 +56,9 @@ namespace CH.Alika.POS.Hardware
             return response.Content;
         }
 
-        public String CodeLineDataPut(MMM.Readers.CodelineData codeLineData)
+        public String CodeLineDataPut(CodeLineScanEvent e)
         {
+            var codeLineData = e.CodeLineData;
             var request = new RestRequest(Method.POST);
             Dictionary<string,object> parameters = new Dictionary<string,object>();
             request.AddJsonBody(new JsonRpcRequest()
@@ -49,7 +66,8 @@ namespace CH.Alika.POS.Hardware
                 Method = "ci_put",
                 Params = new Dictionary<string, object>()
                 {
-                   { "sourceID" , Settings.SourceId },
+                   { "clientId" , Settings.ClientId },
+                   { "accessKey", Settings.AccessKey },
                    { "codeLineData" , codeLineData }
                 }
             });
@@ -66,11 +84,37 @@ namespace CH.Alika.POS.Hardware
             public Object Params { get; set; }
         }
 
-    }
 
-    class ScanStoreConfig
-    {
-        public String BaseUrl { get; set; }
-        public String SourceId { get; set; }
+        private class ScanStoreConfig
+        {
+            public String BaseUrl { get; set; }
+            public String ClientId { get; set; }
+            public String AccessKey { get; set; }
+
+            public static ScanStoreConfig Read(String fileName)
+            {
+                string text = System.IO.File.ReadAllText(fileName);
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<ScanStoreConfig>(text);
+            }
+
+            public void Write(String fileName)
+            {
+                System.IO.File.WriteAllText(fileName, Newtonsoft.Json.JsonConvert.SerializeObject(this));
+            }
+
+            public static bool ScanStoreConfigExists(String fileName)
+            {
+                bool exists = true;
+                try
+                {
+                    Read(fileName);
+                }
+                catch
+                {
+                    exists = false;
+                }
+                return exists;
+            }
+        }
     }
 }
