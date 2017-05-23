@@ -17,10 +17,12 @@ namespace CH.Alika.POS.Hardware
             req.Method = "HEAD";
             req.AllowAutoRedirect = false;
 
-            HttpWebResponse myResp = (HttpWebResponse)req.GetResponse();
-            if (myResp.StatusCode == HttpStatusCode.MovedPermanently)
+            using (HttpWebResponse myResp = (HttpWebResponse)req.GetResponse())
             {
-                longUrl = myResp.GetResponseHeader("Location");
+                if (myResp.StatusCode == HttpStatusCode.MovedPermanently)
+                {
+                    longUrl = myResp.GetResponseHeader("Location");
+                }
             }
 
             return longUrl;

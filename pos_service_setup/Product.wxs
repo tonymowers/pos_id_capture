@@ -29,13 +29,20 @@
     <InstallExecuteSequence>
       <Custom Action="CloseApps"  
               Before="InstallInitialize"></Custom>
+      <Custom Action='LaunchTrayApp' After='InstallFinalize'/>
     </InstallExecuteSequence>
 
     <CustomAction Id="CloseApps"
               BinaryKey="CloseAppsDLL"
               DllEntry="CloseApps"
                   Execute="firstSequence" Return="check" />
-
+    
+    <CustomAction Id="LaunchTrayApp"
+         FileKey="$(var.pos_tray_app.TargetFileName)"
+         ExeCommand=""
+         Execute="immediate"
+         Impersonate="yes"
+         Return="asyncNoWait" />
   </Product>
 
   <Fragment>
@@ -45,7 +52,6 @@
       <Directory Id="ProgramFilesFolder">
         <Directory Id="ROOTDIRECTORY" Name="$(var.Manufacturer)">
           <Directory Id="INSTALLFOLDER" Name="$(var.Name)" >
-            
             <Directory Id="DIR_BIN" Name="bin"/>
           </Directory>
         </Directory>
@@ -117,7 +123,15 @@
         <File Id="AlikaPosTrayApp.exe.log4net" Source="$(var.pos_tray_app.TargetDir)\AlikaPosTrayApp.exe.log4net" KeyPath="yes"/>
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->
       </Component>
-      
+
+      <Component Id="Tray_Windows_Start_HKLM">
+        <RegistryValue Id="Tray_HKLM" Root="HKLM" Action="write"
+                       Key="Software\Microsoft\Windows\CurrentVersion\Run"
+                       Name="ALika POS TrayApp"
+                       Value="[#$(var.pos_tray_app.TargetFileName)]"
+                       Type="string" />
+      </Component>
+   
       <Component Id="log4net_CMP">
         <File Id="log4net.dll" Source="$(var.pos_hardware_console.TargetDir)\log4net.dll" KeyPath="yes"/>
         <!-- Remove all files from the INSTALLFOLDER on uninstall -->

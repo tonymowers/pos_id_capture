@@ -15,6 +15,9 @@ To learn about how to use the WIX installer I relied upon the following websites
 - https://developingsoftware.com/wix-toolset-install-windows-service/
 - https://github.com/rstropek/Samples/tree/master/WiXSamples
 - http://wixtoolset.org
+- https://stackoverflow.com/questions/1871531/launch-after-install-with-no-ui
+- https://stackoverflow.com/questions/1052698/wix-how-to-register-application-to-start-when-windows-launches
+
 
 ## Creating Componet Lists
 
