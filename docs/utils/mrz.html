@@ -15,14 +15,22 @@
 </head>
 <body>
 
-<div class="panel panel-default panel-url-encoder">
+<div class="panel panel-default panel-url-encoder no-print">
     <div class="panel-heading">
         <h3 class="panel-title">Encode Google Short URL Into MRZ</h3>
     </div>
     <div class="panel-body">
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Google Short URL</span>
-            <input type="text" class="form-control" placeholder="Google Short URL" aria-describedby="basic-addon1">
+            <input id="short-url" type="text" class="form-control" placeholder="Google Short URL" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon2">ClientId</span>
+            <input id="client-id" type="text" class="form-control" placeholder="ClientId" aria-describedby="basic-addon1">
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon" id="basic-addon3">AccessKey</span>
+            <input id="access-key" type="text" class="form-control" placeholder="AccessKey" aria-describedby="basic-addon1">
         </div>
         <button id="submit-button" type="submit" class="btn btn-default">Encode</button>
     </div>
@@ -34,7 +42,7 @@
     <p>info@alika.ch</p>
     <div class="box">
         <p>Machine Readable Travel Document</p>
-        <p>Test Document</p>
+        <p>Configuration Document</p>
     </div>
     <div class="mrz">
         <div id="line1">line1</div>
@@ -42,12 +50,43 @@
     </div>
 </div>
 <script>
+    function encodeChar(ch) {
+        var charCode = ch.charCodeAt(0)
+        var u = String.fromCharCode(charCode / 16 + 'A'.charCodeAt(0));
+        var l = String.fromCharCode(charCode % 16 + 'A'.charCodeAt(0));
+        return u + l;
+    }
+    function encodeShortUrl(shortUrl) {
+        var str = shortUrl||"";
+        str = str.replace("https://goo.gl/","");
+        var result = "";
+        for (var i = 0, len = str.length; i < len; i++) {
+
+            result += encodeChar(str.charAt(i));
+        }
+        return result;
+    }
+    function encode() {
+        var shortUrl = $('#short-url').val();
+        var clientId = $('#client-id').val();
+        var accessKey = $('#access-key').val();
+        var id = {
+            docType: 'P',
+            docSubtype: 'Z',
+            issuingCountry: 'XXX',
+            nationality: 'CHE',
+            lastName : encodeShortUrl(shortUrl),
+            personalNumber : clientId,
+            docNo: accessKey
+        };
+        var mrz = mrzGenerate(id);
+        $("#line1").text(mrz.line1);
+        $("#line2").text(mrz.line2);
+    }
     $(function () {
         var id = {};
-        id.docType = "P";
-        id.docSubtype = "Z";
-        id.lastName = "Toronto";
-        id.issuingCountry = "XXX";
+        $('#submit-button').click(encode);
+
         var mrz = mrzGenerate(id);
         $("#line1").text(mrz.line1);
         $("#line2").text(mrz.line2);

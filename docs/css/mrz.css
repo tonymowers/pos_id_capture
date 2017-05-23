@@ -7,18 +7,31 @@
     float: right;
 }
 
+.panel-url-encoder .input-group-addon {
+    min-width: 150px;
+    text-align: right;
+}
+
+.panel-url-encoder .input-group {
+    margin: 0px 0px 10px 0px;
+}
+
 .mrz-card {
     width: 500px;
+    margin-top: 50px;
     font-size: 12pt;
 }
+
 .mrz-card h1 {
     margin: 0px;
     padding: 0px;
 }
+
 .mrz-card p {
     padding: 0;
     margin: 0;
 }
+
 .mrz-card * {
     text-align: center;
 }
@@ -29,16 +42,28 @@
     margin: 2em auto 2em auto;
     width: 80%;
 }
+
 .mrz-label p {
     padding: 0px;
     margin: 0px;
 }
+
 .mrz {
-    font-family: OcrB Regular, monospace;
+    font-family: OCRB, monospace;
     font-size: 12pt;
     font-weight: 400;
     line-height: 1.4em;
     letter-spacing: 1px;
     padding: 5px;
     margin: 0;
+}
+
+@media print {
+    .no-print, .no-print * {
+        display: none !important;
+    }
+    .mrz {
+        font-size: .400cm;
+        font-weight: 200;
+    }
 }
