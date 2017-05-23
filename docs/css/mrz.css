@@ -64,6 +64,7 @@
     }
     .mrz {
         font-size: .400cm;
+        font-family: OCR B, monospace;
         font-weight: 200;
     }
 }
