@@ -104,18 +104,36 @@ namespace CH.Alika.POS.TrayApp
         {
             _uiThreadContext.Post((SendOrPostCallback)delegate
             {
-                System.Media.SystemSounds.Asterisk.Play();
                 if (e.ScanDeliveryResult.WasDelivered)
                 {
-                    notifyIcon.BalloonTipText = "A scanned document was successfully delivered to cloud service";
-                    notifyIcon.BalloonTipTitle = "Document Scan Delivered";
-                    notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
+                    try
+                    {
+                        var balloonTip = Newtonsoft.Json.JsonConvert.DeserializeObject<BalloonTip>(e.ScanDeliveryResult.DeliveryResponse);
+                        notifyIcon.BalloonTipTitle = balloonTip.Title;
+                        notifyIcon.BalloonTipText = balloonTip.Text;
+                        notifyIcon.BalloonTipIcon = balloonTip.Icon;
+                    }
+                    catch
+                    {
+                        var balloonTip = new BalloonTip();
+                        notifyIcon.BalloonTipText = balloonTip.Text;
+                        notifyIcon.BalloonTipTitle = balloonTip.Title;
+                        notifyIcon.BalloonTipIcon = balloonTip.Icon;
+                    }
                 }
                 else
                 {
                     notifyIcon.BalloonTipText = "Error: " + e.ScanDeliveryResult.DeliveryResponse;
                     notifyIcon.BalloonTipTitle = "Document Scan Delivery Failed";
                     notifyIcon.BalloonTipIcon = ToolTipIcon.Error;
+                }
+                if (ToolTipIcon.Error.Equals(notifyIcon.BalloonTipIcon) || ToolTipIcon.Warning.Equals(notifyIcon.BalloonTipIcon))
+                {
+                    System.Media.SystemSounds.Beep.Play();
+                }
+                else
+                {
+                    System.Media.SystemSounds.Asterisk.Play(); 
                 }
                 notifyIcon.ShowBalloonTip(3);
             }, null);
