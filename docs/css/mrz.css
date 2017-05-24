@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'MyOCRB';
+    src: url('OCRB.woff');
+}
+
 .panel-url-encoder {
     width: 500px;
 }
@@ -49,7 +54,7 @@
 }
 
 .mrz {
-    font-family: OCR B, monospace;
+    font-family: 'MyOCRB',OCR B, monospace;
     font-size: 12pt;
     font-weight: 400;
     line-height: 1.4em;
@@ -64,7 +69,7 @@
     }
     .mrz {
         font-size: .400cm;
-        font-family: OCR B, monospace;
+        font-family: 'MyOCRB',OCR B, monospace;
         font-weight: 200;
     }
 }
