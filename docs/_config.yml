@@ -1,3 +1,4 @@
 theme: jekyll-theme-cayman
 
-title: Point-Of-Sale ID Capture
+title: Customer ID Capture
+description: Scan machine readable identiy cards and forward to cloud
