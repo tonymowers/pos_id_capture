@@ -2,3 +2,4 @@ theme: jekyll-theme-cayman
 
 title: Customer ID Capture
 description: Scan machine readable identiy cards and forward to cloud
+show_downloads: true
