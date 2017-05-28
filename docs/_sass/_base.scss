@@ -1,18 +1,23 @@
-$content-width: 800px;
-$main: #19CCAA;
-$font-style: 'Open Sans', sans-serif;
-$font-color: #262626;
-$link-color: #425469;
-$link-hover-color: $main;
-$heading-font: 'Muli', sans-serif;
-$heading-font-color: #425469;
-$light: #E7EDF4;
-$header:  #1D1425;
+// Breakpoints
+$large-breakpoint: 64em;
+$medium-breakpoint: 42em;
 
-*,
-*::before,
-*::after {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
+// Headers
+$header-heading-color: #fff;
+$header-bg-color: #159957;
+$header-bg-color-secondary: #155799;
+
+// Text
+$section-headings-color: #159957;
+$body-text-color: #606c71;
+$body-link-color: #1e6bb8;
+$blockquote-text-color: #819198;
+
+// Code
+$code-bg-color: #f3f6fa;
+$code-text-color: #567482;
+
+// Borders
+$border-color: #dce6f0;
+$table-border-color: #e9ebec;
+$hr-border-color: #eff0f1;
