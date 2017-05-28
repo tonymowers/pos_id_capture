@@ -1,6 +1,9 @@
-theme: jekyll-theme-cayman
-
+# theme: jekyll-theme-cayman # jekyll-theme-cayman
 title: Customer ID Capture
-description: Scan machine readable identiy cards and forward to cloud
+description: Scan machine readable identity cards and forward to cloud
 show_releases: true
 release_url: https://github.com/tony-mowers/pos_id_capture/releases/latest
+
+# Build Settings
+sass:
+  sass_dir: _sass
