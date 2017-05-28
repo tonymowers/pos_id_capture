@@ -3,6 +3,7 @@ html {
 }
 body {
   font-size: 1em;
+  padding-top: 50px;
 }
 
 h1 {
@@ -14,10 +15,14 @@ h2 {
 }
 .navbar {
   margin-bottom: 0;
+  border-radius: 0;
 }
 .page-header {
+  font-family: "Verdana";
   text-align: center;
-  padding: 1rem 0rem 2rem 0rem;
+  color: $header-heading-color;
+  background-color: $header-bg-color;
+  padding: 1rem 0rem 4rem 0rem;
   margin:  0rem 0rem 2rem 0rem;
 }
 .main-content {
