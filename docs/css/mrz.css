@@ -3,6 +3,9 @@
     src: url('OCRB.woff');
 }
 
+.instructions {
+    max-width: 500px;
+}
 .panel-url-encoder {
     width: 500px;
 }

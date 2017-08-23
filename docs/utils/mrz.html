@@ -1,20 +1,24 @@
-<!DOCTYPE html>
+---
+layout: page
+---
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-
-
-    <link rel="stylesheet" href="../css/mrz.css">
-    <script src="../js/mrz.js"></script>
+    <link rel="stylesheet" href="{{ site.baseurl }}/css/mrz.css">
+    <script src="{{ site.baseurl }}/js/mrz.js"></script>
 </head>
-<body>
-
+<div class="instructions no-print">
+    <h1>Instructions</h1>
+    <p class="no-print">
+        Use this page to create and print a machine readable document that when scanned by your
+        Swipe Reader to perform a one time configuration of the Windows service telling
+        it the location of the cloud service to which to forward the scanned documents.
+    </p>
+    <ul>
+        <li><b>Google Short URL</b> must point to the location of the cloud service to which you want your
+        scans to be forwarded.</li>
+        <li><b>ClientId</b> and <b>AccessKey</b> are passed as parameters to the
+            service and can be used by the service to authenticate the sender.</li>
+    </ul>
+</div>
 <div class="panel panel-default panel-url-encoder no-print">
     <div class="panel-heading">
         <h3 class="panel-title">Encode Google Short URL Into MRZ</h3>
@@ -29,17 +33,20 @@
         </div>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Google Short URL</span>
-            <input id="short-url" type="text" class="form-control" placeholder="Google Short URL" aria-describedby="basic-addon1">
+            <input id="short-url" type="text" class="form-control" placeholder="Google Short URL"
+                   aria-describedby="basic-addon1">
         </div>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon2">ClientId</span>
-            <input id="client-id" type="text" class="form-control" placeholder="ClientId" aria-describedby="basic-addon1">
+            <input id="client-id" type="text" class="form-control" placeholder="ClientId"
+                   aria-describedby="basic-addon1">
         </div>
         <div class="input-group">
             <span class="input-group-addon" id="basic-addon3">AccessKey</span>
-            <input id="access-key" type="text" class="form-control" placeholder="AccessKey" aria-describedby="basic-addon1">
+            <input id="access-key" type="text" class="form-control" placeholder="AccessKey"
+                   aria-describedby="basic-addon1">
         </div>
-        <button id="submit-button" type="submit" class="btn btn-default">Encode</button>
+        <button id="submit-button" type="submit" class="btn btn-default btn-primary">Encode</button>
     </div>
 </div>
 
@@ -64,8 +71,8 @@
         return u + l;
     }
     function encodeShortUrl(shortUrl) {
-        var str = shortUrl||"";
-        str = str.replace("https://goo.gl/","");
+        var str = shortUrl || "";
+        str = str.replace("https://goo.gl/", "");
         var result = "";
         for (var i = 0, len = str.length; i < len; i++) {
 
@@ -101,4 +108,3 @@
         $("#line2").text(mrz.line2);
     });
 </script>
-</body>
