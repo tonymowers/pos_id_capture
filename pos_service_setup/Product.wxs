@@ -4,7 +4,7 @@
 <!-- The manufacturer, for setup package publisher and folder info -->
 <?define Manufacturer = "Alika Analytics" ?>
 <!-- The version number of this setup package-->
-<?define Version = "1.0.1" ?>
+<?define Version = "2.0.0" ?>
 <!-- UpgradeCode must be unique and not changed once the first version of the program is installed. -->
 <?define UpgradeCode = "{458daa77-6451-4ac2-add7-42c316cd5ab2}" ?>
 <!-- 3M sdk -->
@@ -12,7 +12,7 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   <Product Id="{A640B013-FD6D-4FFB-A8F9-915C6C478C4D}" Name="$(var.Name)" Language="1033" Version="$(var.Version)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)">
-    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+    <Package InstallerVersion="300" Compressed="yes" InstallScope="perMachine" />
 
     <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed. Setup will now exit." />
     <MediaTemplate EmbedCab="yes" />

@@ -10,12 +10,14 @@ namespace CH.Alika.POS.Hardware
         public String ShortURL { get; private set; }
         public String ClientId { get; private set; }
         public String AccessKey { get; private set; }
+        public String ProtocolVersion { get; private set; }
 
         public MrzBasedConfigurationData(String line1, String line2)
         {
             ShortURL = decodeGoogleShortUrl(line1.Substring(5).Replace("<",""));
             ClientId = line2.Substring(28, 14).Replace("<","");
             AccessKey = line2.Substring(0, 9).Replace("<","");
+            ProtocolVersion = line2.Substring(13, 2).Replace("<", "");
         }
 
         private string decodeGoogleShortUrl(String str)

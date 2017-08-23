@@ -4,7 +4,7 @@ This DLL contains implementations of custom actions which are used by the instal
 
 Currently there is only the "CloseApps" custom action.  Wix comes with a similar action, but it
 seems to have some funny behavior when used from within the bundle installer.  Therefore
-this action was created to provide so we'll have the ability to customize it as needed.
+this action was created so we'll have the ability to customize it as needed.
 
 ## Learning references
 

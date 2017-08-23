@@ -7,6 +7,7 @@ using System.IO;
 
 namespace CH.Alika.POS.Hardware
 {
+
     public class ScanStoreRestImpl
     {
         private ScanStoreConfig Settings;
@@ -24,7 +25,7 @@ namespace CH.Alika.POS.Hardware
             }
         }
 
-        private void CreateScanStoreConfigFileIfNecessary(String configFileName, CodeLineScanEvent e) 
+        private void CreateScanStoreConfigFileIfNecessary(String configFileName, CodeLineScanEvent e)
         {
             if (!System.IO.File.Exists(configFileName) && Utils.IsConfigurationEvent(e))
             {
@@ -34,7 +35,8 @@ namespace CH.Alika.POS.Hardware
                 {
                     ClientId = configData.ClientId,
                     AccessKey = configData.AccessKey,
-                    BaseUrl = longUrl
+                    BaseUrl = longUrl,
+                    ProtocolVersion = configData.ProtocolVersion
                 };
                 settings.Write(configFileName);
             }
@@ -58,10 +60,19 @@ namespace CH.Alika.POS.Hardware
 
         public String CodeLineDataPut(CodeLineScanEvent e)
         {
+            if (string.IsNullOrWhiteSpace(Settings.ProtocolVersion)) {
+                return CodeLineDataPutV1(e);
+            } else {
+                return CodeLineDataPutV2(e);
+            }
+        }
+
+        private String CodeLineDataPutV1(CodeLineScanEvent e)
+        {
             var codeLineData = e.CodeLineData;
             var request = new RestRequest(Method.POST);
-            Dictionary<string,object> parameters = new Dictionary<string,object>();
-            request.AddJsonBody(new JsonRpcRequest()
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            request.AddJsonBody(new JsonRpcRequestV1()
             {
                 Method = "ci_put",
                 Params = new Dictionary<string, object>()
@@ -74,11 +85,25 @@ namespace CH.Alika.POS.Hardware
             return Execute<VOID>(request);
         }
 
+        private String CodeLineDataPutV2(CodeLineScanEvent e)
+        {
+            var codeLineData = e.CodeLineData;
+            var request = new RestRequest(Method.POST);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            request.AddJsonBody(new Dictionary<string, object>()
+            {
+                { "clientId" , Settings.ClientId },
+                { "accessKey", Settings.AccessKey },
+                { "codeLineData" , codeLineData }
+            });
+            return Execute<VOID>(request);
+        }
+
         private class VOID
         {
         }
 
-        private class JsonRpcRequest
+        private class JsonRpcRequestV1
         {
             public string Method { get; set; }
             public Object Params { get; set; }
@@ -90,6 +115,7 @@ namespace CH.Alika.POS.Hardware
             public String BaseUrl { get; set; }
             public String ClientId { get; set; }
             public String AccessKey { get; set; }
+            public String ProtocolVersion { get; set; }
 
             public static ScanStoreConfig Read(String fileName)
             {

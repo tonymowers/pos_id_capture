@@ -4,7 +4,7 @@
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
   
   
-	<Bundle Name="Alika Point-Of-Sale Bundle" AboutUrl="http://www.alika.ch" Version="1.0.0.1" Manufacturer="Alika Analytics" UpgradeCode="078243ae-9f65-42f6-a2ab-581bb2c6ece8">
+	<Bundle Name="Alika Point-Of-Sale Bundle" AboutUrl="http://www.alika.ch" Version="2.0.0.0" Manufacturer="Alika Analytics" UpgradeCode="078243ae-9f65-42f6-a2ab-581bb2c6ece8">
     <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
       <!-- Logo should be 64x64 -->
       <bal:WixStandardBootstrapperApplication LicenseFile="License.rtf" LogoFile="LogoWithText64x64.png" />

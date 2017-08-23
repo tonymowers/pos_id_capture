@@ -20,7 +20,6 @@ namespace CH.Alika.POS.ConsoleApp
 
         static void Main(string[] args)
         {
-            Console.WriteLine(Utils.RetrieveLongUrlFromGoogle("https://goo.gl/40XBiL"));
             using (LogProvider.OpenNestedContext("AlikaPosConsole_MAIN"))
             {
                 log.Info("Starting AlikaPosConsole Application");
