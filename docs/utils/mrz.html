@@ -21,6 +21,13 @@
     </div>
     <div class="panel-body">
         <div class="input-group">
+            <span class="input-group-addon" id="basic-addon4">Protocol</span>
+            <select class="form-control" id="protocol-version">
+              <option value="010000">REST API</option>
+              <option value="">Deprecated API</option>
+            </select>
+        </div>
+        <div class="input-group">
             <span class="input-group-addon" id="basic-addon1">Google Short URL</span>
             <input id="short-url" type="text" class="form-control" placeholder="Google Short URL" aria-describedby="basic-addon1">
         </div>
@@ -70,12 +77,14 @@
         var shortUrl = $('#short-url').val();
         var clientId = $('#client-id').val();
         var accessKey = $('#access-key').val();
+        var protocolVersion = $('#protocol-version').val();
         var id = {
             docType: 'P',
             docSubtype: 'Z',
             issuingCountry: 'XXX',
             nationality: 'CHE',
             lastName : encodeShortUrl(shortUrl),
+            dateBirth: protocolVersion,
             personalNumber : clientId,
             docNo: accessKey
         };
