@@ -1,0 +1,37 @@
+html {
+  font-size: 10px;
+}
+body {
+  font-size: 1em;
+  padding-top: 50px;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+.page-header {
+  font-family: "Verdana";
+  text-align: center;
+  color: $header-heading-color;
+  background-color: $header-bg-color;
+  padding: 1rem 0rem 4rem 0rem;
+  margin:  0rem 0rem 2rem 0rem;
+}
+.main-content {
+  font-size: 1rem;
+  margin: 0rem 2rem 0rem 2rem;
+}
+p {
+  font-size: 1.4rem;
+}
+li {
+  font-size: 1.4rem;
+}
