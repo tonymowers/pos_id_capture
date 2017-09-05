@@ -72,7 +72,8 @@ layout: page
     }
     function encodeShortUrl(shortUrl) {
         var str = shortUrl || "";
-        str = str.replace("https://goo.gl/", "");
+        str = str.replace("https://","");
+        str = str.replace("goo.gl/", "");
         var result = "";
         for (var i = 0, len = str.length; i < len; i++) {
 
