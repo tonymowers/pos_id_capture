@@ -72,6 +72,9 @@ layout: page
     }
     function encodeShortUrl(shortUrl) {
         var str = shortUrl || "";
+        // remove generic part of short URL and
+        // leave only the unique part of the URL to be encode
+        str = str.replace("http://","");
         str = str.replace("https://","");
         str = str.replace("goo.gl/", "");
         var result = "";
